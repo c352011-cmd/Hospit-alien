@@ -1,0 +1,741 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>💣︎📬︎✌︎📬︎💧︎📬︎💧︎ ◻︎ ❄︎♏︎●︎♏︎❍︎♏︎♎︎♓︎♍︎♓︎■︎♏︎ 💧︎⍓︎⬧︎⧫︎♏︎❍︎</title>
+
+    <!--
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    GOOGLE FONTS
+    "Space Grotesk" is used for clean,
+    slightly alien-feeling headings.
+    "DM Mono" gives a clinical/terminal
+    feel to subtitles and labels.
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cossette+Texte:wght@400;700&family=Dongle&family=Noto+Sans+KR:wght@100..900&family=Outfit:wght@100..900&family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+                     All colors, spacing, and font-sizes are
+                     defined here so changes are easy.
+                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      :root {
+        --black: #000000;
+        --white: #ffffff;
+        --green: #00ff41; /* neon green — brand accent */
+        --gray-light: #f2f2f2;
+        --gray-mid: #cccccc;
+        --gray-text: #888888;
+        --font-head: "Space Grotesk", sans-serif;
+        --font-mono: Cossette Texte;
+        --radius: 999px; /* pill-shaped buttons */
+        --transition: 0.25s ease;
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     RESET & BASE STYLES
+                     Removes browser defaults and sets a
+                     consistent box-sizing model.
+                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--white);
+        color: var(--black);
+        font-family: "Space Grotesk";
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     SCREEN SYSTEM
+                     Each "screen" is a full-viewport page.
+                     Only one screen is visible at a time
+                     (controlled by JS toggling .active).
+                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      .screen {
+        display: none; /* hidden by default */
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 48px 24px;
+        text-align: center;
+        animation: fadeIn 0.4s ease;
+      }
+      .screen.active {
+        display: flex;
+      } /* shown when active */
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     TYPOGRAPHY
+                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      h1 {
+        font-size: clamp(2.4rem, 6vw, 4.5rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+      h2 {
+        font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        margin-top: 6px;
+      }
+      h3 {
+        font-family: Cossette Texte;
+        font-size: clamp(0.75rem, 1.5vw, 1rem);
+        font-weight: 400;
+        color: var(--gray-text);
+        margin-top: 16px;
+        letter-spacing: 0.04em;
+        word-spacing: 0.04em;
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     LOGO / FOOTER MARK
+                     The small M.A.S.S. icon shown at the
+                     bottom of several screens — drawn as SVG.
+                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      .logo-mark {
+        margin-top: 90px;
+        width: 148px;
+        height: 96px;
+        opacity: 0.35;
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     FOOTER CREDIT (Screen 1 only)
+                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      .footer-credit {
+        font-family: Cossette Texte;
+        font-size: 0.7rem;
+        color: var(--gray-mid);
+        margin-top: 16px;
+        letter-spacing: 0.06em;
+      }
+
+      
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     ── SCREEN 3 ── CHROMOSOME SELECTION
+                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      .chrom-picker {
+        display: flex;
+        gap: 48px;
+        margin-top: 32px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      /* Each clickable chromosome icon + letter */
+      .chrom-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 64px;
+        height: auto;
+        transition: transform var(--transition);
+        margin-top: -10px;
+      }
+
+      .chrom-btn:hover {
+        transform: scale(1.12);
+      }
+      .chrom-btn span {
+        font-size: 1rem;
+        font-family: Cossette Texte;
+        letter-spacing: 0.1em;
+      }
+
+      /* Large center box that shows selected chromosomes */
+      .chrom-display {
+        display: flex;
+        align-items: center; /* centers vertically */
+        justify-content: center; /* centers horizontally */
+        margin-top: 28px;
+        width: 686.756px;
+        height: 318.597px;
+        background: #fff;
+        box-shadow: 0 0 40px 4px rgba(0, 0, 0, 0.07);
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     "Next" pill button  (Screens 3 & 4)
+                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      .btn-next {
+        display: flex;
+        margin-top: 55px;
+        width: 103px;
+        padding: 8px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        border-radius: 33px;
+        border: 3px solid #000;
+        background: #fff;
+      }
+      .btn-next:hover {
+        background: var(--black);
+        color: var(--white);
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     ── SCREEN 4 ── OPTIONAL INFO
+                     Three number-spinner columns side by side
+                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      .unit-btn {
+        padding: 4px 10px;
+        border-radius: 33px;
+        border: 2px solid #000;
+        background: var(--white);
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      /* Highlighted state for the currently selected unit */
+      .unit-btn.selected {
+        background: var(--black);
+        color: var(--white);
+      }
+
+      .unit-btn:hover {
+        background: var(--black);
+        color: var(--white);
+      }
+
+      .opt-row {
+        display: flex;
+        gap: 32px;
+        margin-top: 40px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      /* Each column: label + tall display box + arrow buttons */
+      .opt-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .opt-col label {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        letter-spacing: 0.06em;
+      }
+
+      /* The tall white box showing the current value */
+      .opt-display {
+        width: 332.299px;
+        height: 356px;
+
+        background: #fff;
+        box-shadow: 0 0 40px 4px rgba(0, 0, 0, 0.07);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        position: relative;
+      }
+
+      /* Row of ◀ ▶ arrow buttons */
+      .opt-arrows {
+        display: flex;
+        gap: 12px;
+        align-items: center; /* ← vertically aligns both arrows to same line */
+        justify-content: center; /* ← centers the pair horizontally */
+      }
+
+      .btn-arrow {
+        background: none;
+        border: none;
+        font-size: 14px; /* ← fixed px size, same for all arrows */
+        width: 24px; /* ← fixed width */
+        height: 24px; /* ← fixed height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 0; /* ← remove any padding that could affect size */
+        line-height: 1; /* ← prevents line height from affecting size */
+        transition: 0.2s ease;
+        color: var(--black);
+      }
+
+      .btn-arrow:hover {
+        color: var(--gray-text);
+      }
+
+      .btn-arrow:hover {
+        color: var(--gray-text);
+      }
+
+      .btn-about{
+        display: flex;
+        width: 110px;
+        padding: 8px;
+        flex-direction: column;
+        /* justify-content: center; */
+        align-items: center;
+        gap: 8px;
+        font-family: Cossette Texte;
+        font-size: 1rem;
+        border-radius: 33px;
+        border: 3px solid #000;
+        background: #fff;
+        position: fixed;
+        top: 32px;
+        left: 32px;
+      }
+
+      .btn-about:hover {
+        background: var(--black);
+        color: var(--green);
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     ── SCREEN W (LOADING) ── Matching Doctor
+                     Appears briefly as a transition screen.
+                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      .matching-text {
+        margin-bottom: 48px;
+      }
+
+      /* Animated ellipsis dots */
+      .dots::after {
+        content: "";
+        animation: dots 1.5s steps(4, end) infinite;
+      }
+      @keyframes dots {
+        0% {
+          content: "";
+        }
+        25% {
+          content: ".";
+        }
+        50% {
+          content: ". .";
+        }
+        75% {
+          content: ". . .";
+        }
+        100% {
+          content: "";
+        }
+      }
+    </style>
+  </head>
+  <body>
+    
+    <!-- ════════════════════════════════════════════════════════
+     SCREEN 3 — Chromosome Selection
+     Reference: 3.png
+     Users click chromosome type buttons to add them
+     to the display box, then press Next.
+     ════════════════════════════════════════════════════════ -->
+    <section class="screen active" id="screen3">
+      <div class="screen-header">
+        <h1>👍︎●︎♓︎♍︎🙵 ⍓︎□︎◆︎❒︎ ♍︎♒︎❒︎□︎❍︎□︎⬧︎□︎❍︎♏︎⬧︎</h1>
+        
+      </div>
+
+      <!--
+    Four chromosome type buttons (X, Y, I, T).
+    Each is an SVG shape that resembles the chromosome letter.
+    Clicking a button appends a copy of that SVG to #chromDisplay.
+  -->
+      <div class="chrom-picker">
+        <!-- X chromosome: two diagonal crossing bars -->
+        <button class="chrom-btn" data-type="X" onclick="addChromosome('X')">
+          <img src="x.svg" alt="X" />
+          <span>⌧︎</span>
+        </button>
+
+        <!-- Y chromosome: V-shape with a stem -->
+        <button class="chrom-btn" data-type="Y" onclick="addChromosome('Y')">
+          <img src="y.svg" alt="y" />
+          <span>⍓︎</span>
+        </button>
+
+        <!-- I chromosome: straight vertical bar with caps -->
+        <button class="chrom-btn" data-type="I" onclick="addChromosome('I')">
+          <img src="i.svg" alt="i" />
+          <span>♓︎</span>
+        </button>
+
+        <!-- T chromosome: horizontal bar on top with a stem -->
+        <button class="chrom-btn" data-type="T" onclick="addChromosome('T')">
+          <img src="t.svg" alt="t" />
+          <span>⧫︎</span>
+        </button>
+      </div>
+
+      <!--
+    The display box: selected chromosomes are rendered here.
+    JS appends SVG clones into this element.
+  -->
+      <div class="chrom-display" id="chromDisplay">
+        <!-- Chromosome icons appear here when clicked above -->
+      </div>
+
+      <!-- Next button → Screen 4 -->
+      <button class="btn-next" onclick="goToScreen('screen4')">■︎♏︎⌧︎⧫︎</button>
+
+      <div class="logo-mark">
+        <img src="logo.svg" alt="mass" />
+      </div>
+      <button class="btn-about"
+            onclick="window.location.href = 'main.html'" >♌︎♋︎♍︎🙵</button>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+     SCREEN 4 — Optional Information
+     Reference: 4.png
+     Three number spinners: Height / Weight / Birth date.
+     ◀ ▶ buttons increment/decrement the displayed value.
+     ════════════════════════════════════════════════════════ -->
+    <section class="screen" id="screen4">
+      <div class="screen-header">
+        <h1>⚐︎◻︎⧫︎♓︎□︎■︎♋︎●︎ ♓︎■︎♐︎□︎❒︎❍︎♋︎⧫︎♓︎□︎■︎ </h1>
+        
+      </div>
+
+      <div class="opt-row">
+        <!--
+      Height spinner
+      data-unit: suffix appended to the number in the display
+      JS reads data-value, increments/decrements, then updates display.
+    -->
+        <div class="opt-col">
+          <label>☟︎♏︎♓︎♑︎♒︎⧫︎</label>
+          <!-- img tag instead of a number display div -->
+          <div class="opt-display">
+            <img
+              id="disp-height"
+              src="1_small_m.svg"
+              alt="height"
+              style="width: 100%; height: 100%; object-fit: contain"
+            />
+          </div>
+          <div class="opt-arrows">
+            <button class="btn-arrow" onclick="changeHeight(-1)">
+              &#9664;
+            </button>
+            <button class="btn-arrow" onclick="changeHeight(+1)">
+              &#9654;
+            </button>
+          </div>
+        </div>
+
+        <!-- Weight spinner -->
+        <div class="opt-col">
+          <label>🕈︎♏︎♓︎♑︎♒︎⧫︎</label>
+          <div
+            class="opt-display"
+            style="
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              gap: 16px;
+            "
+          >
+            <!-- number and unit shown side by side -->
+            <div style="display: flex; align-items: baseline; gap: 6px">
+              <span id="disp-weight">60</span>
+              <span
+                id="disp-weight-unit"
+                style="font-size: 1rem; font-weight: 400"
+                >🙵♑︎</span
+              >
+            </div>
+
+            <!-- unit buttons pinned to the bottom of the box -->
+            <div
+              style="
+                position: absolute;
+                bottom: 16px; /* distance from bottom edge */
+                left: 50%;
+                transform: translateX(-50%); /* centers horizontally */
+                display: flex;
+                gap: 6px;
+              "
+            >
+              <button class="unit-btn" onclick="setUnit('mg')">❍︎♑︎</button>
+              <button class="unit-btn" onclick="setUnit('g')">♑︎</button>
+              <button class="unit-btn" onclick="setUnit('kg')">🙵♑︎</button>
+              <button class="unit-btn" onclick="setUnit('t')">⧫︎</button>
+            </div>
+          </div>
+
+          <!-- arrows stay outside below the box -->
+          <div class="opt-arrows">
+            <button class="btn-arrow" onclick="changeVal('weight', -1)">
+              &#9664;
+            </button>
+            <button class="btn-arrow" onclick="changeVal('weight', +1)">
+              &#9654;
+            </button>
+          </div>
+        </div>
+
+        <!-- Birth date spinner (year only for simplicity) -->
+        <div class="opt-col">
+          <label>👌︎♓︎❒︎⧫︎♒︎ ♎︎♋︎⧫︎♏︎</label>
+          <div class="opt-display" id="disp-birthdate">2000</div>
+          <div class="opt-arrows">
+            <button class="btn-arrow" onclick="changeVal('birthdate', -1)">
+              &#9664;
+            </button>
+            <button class="btn-arrow" onclick="changeVal('birthdate', +1)">
+              &#9654;
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next → loading screen (screen-w) then symptom screen -->
+      <button class="btn-next" onclick="goToScreen('screenW')">☠︎♏︎⌧︎⧫︎</button>
+
+      <div class="logo-mark">
+        <img src="logo.svg" alt="mass" />
+      </div>
+      <button class="btn-about"
+            onclick="goToScreen('screen3')" >♌︎♋︎♍︎🙵</button>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+     SCREEN W — Matching Doctor (Loading transition)
+     Reference: 2.png (loading screen)
+     Shown briefly, then auto-advances to Screen 5.
+     ════════════════════════════════════════════════════════ -->
+    <section class="screen" id="screenW">
+      <div class="matching-text">
+        <h1>💣︎♋︎⧫︎♍︎♒︎♓︎■︎♑︎ ⍓︎□︎◆︎❒︎ ♎︎□︎♍︎⧫︎□︎❒︎<span class="dots"></span></h1>
+        
+      </div>
+
+       <div class="logo-mark">
+        <img src="logo.svg" alt="mass" />
+      </div>
+      </div>
+    </section>
+
+    
+
+    <!-- ════════════════════════════════════════════════════════
+     JAVASCRIPT
+     ════════════════════════════════════════════════════════ -->
+    <script>
+      /* ─── NAVIGATION ────────────────────────────────────────
+     goToScreen(id)
+     Hides all .screen elements, then shows the target one
+     by adding the .active class.
+     Special case: "screenW" auto-advances after 2.5 s.
+  ─────────────────────────────────────────────────────── */
+      function goToScreen(id) {
+  document
+    .querySelectorAll(".screen")
+    .forEach((s) => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  if (id === "screenW") {
+    setTimeout(() => {
+      window.location.href = "mars.conv.html"; // ← opens conversation.html after 2.5s
+    }, 2500);
+  }
+}
+
+      /* ─── CHROMOSOME DISPLAY ────────────────────────────────
+     addChromosome(type)
+     Called when a chromosome button (X / Y / I / T) is clicked.
+     Clones the corresponding SVG from the picker and appends it
+     to the #chromDisplay box. Limits total count to 8.
+  ─────────────────────────────────────────────────────── */
+      function addChromosome(type) {
+        const display = document.getElementById("chromDisplay");
+
+        // max 8 chromosomes
+        if (display.children.length >= 8) return;
+
+        // find the button by data-type
+        const btn = document.querySelector(`.chrom-btn[data-type="${type}"]`);
+
+        if (!btn) return;
+
+        // clone the img tag instead of svg
+        const targetImg = btn.querySelector("img").cloneNode(true);
+
+        // set the size of the cloned image
+        targetImg.style.width = "148px";
+        targetImg.style.height = "172px";
+        targetImg.style.objectFit = "contain"; // ← keeps image proportions correct
+
+        display.appendChild(targetImg);
+      }
+      // Listen for keyboard input
+document.addEventListener('keydown', function(event) {
+
+  // trigger on Delete key OR Backspace key
+  if (event.key === 'Delete' || event.key === 'Backspace') {
+
+    const display = document.getElementById('chromDisplay');
+
+    // if there are any chromosomes in the box
+    if (display.children.length > 0) {
+
+      // remove the LAST added chromosome
+      display.removeChild(display.lastChild);
+    }
+  }
+});
+
+      /* ─── OPTIONAL INFO SPINNERS ────────────────────────────
+     changeVal(field, delta)
+     Reads current number from the display element,
+     adds delta (+1 or -1), clamps to min/max, writes back.
+
+     Fields and their ranges:
+       height    : 50 – 300  (cm)
+       weight    : 1  – 500  (kg)
+       birthdate : 1900 – 2200 (year)
+  ─────────────────────────────────────────────────────── */
+      const valConfig = {
+        height: { min: 50, max: 300, step: 1 },
+        weight: { min: 1, max: 500, step: 1 },
+        birthdate: { min: 1900, max: 2200, step: 1 },
+      };
+
+      function changeVal(field, delta) {
+        const el = document.getElementById(`disp-${field}`);
+        const cfg = valConfig[field];
+        let val = parseInt(el.textContent) + delta * cfg.step;
+
+        // Clamp within allowed range
+        val = Math.max(cfg.min, Math.min(cfg.max, val));
+        el.textContent = val;
+      }
+
+      // Called when a unit button (mg / g / kg / t) is clicked
+      function setUnit(unit) {
+        // update the unit text shown next to the number
+        document.getElementById("disp-weight-unit").textContent = unit;
+
+        // update button highlight: remove .selected from all, add to clicked one
+        document.querySelectorAll(".unit-btn").forEach((btn) => {
+          btn.classList.remove("selected");
+          if (btn.textContent === unit) btn.classList.add("selected");
+        });
+      }
+
+      // Set kg as selected by default on page load
+      window.addEventListener("load", () => {
+        document
+          .querySelector(".unit-btn[onclick=\"setUnit('kg')\"]")
+          .classList.add("selected");
+      });
+      function setUnit(unit) {
+        // update the unit text shown next to the number
+        document.getElementById("disp-weight-unit").textContent = unit;
+
+        // update button highlight
+        document.querySelectorAll(".unit-btn").forEach((btn) => {
+          btn.classList.remove("selected");
+          if (btn.textContent === unit) btn.classList.add("selected");
+        });
+
+        // change font size based on unit — bigger measure = bigger font
+        const sizeMap = {
+          mg: "1rem", // smallest unit → smallest font
+          g: "5rem", // small unit → small font
+          kg: "8rem", // medium unit → medium font
+          t: "15rem", // biggest unit → biggest font
+        };
+
+        document.getElementById("disp-weight").style.fontSize = sizeMap[unit];
+      }
+      window.addEventListener("load", () => {
+        setUnit("kg"); // sets kg as selected AND applies its font size
+      });
+
+      /* ─── SUBMIT HANDLER ────────────────────────────────────
+     handleSubmit()
+     Reads the symptom keyword and shows a simple alert.
+     In a real app this would send data to a backend.
+  ─────────────────────────────────────────────────────── */
+      function handleSubmit() {
+        const symptom = document.getElementById("symptomInput").value.trim();
+        const name =
+          document.getElementById("nameInput").value.trim() || "Patient";
+        if (!symptom) {
+          alert("Please write at least one keyword before submitting.");
+          return;
+        }
+        alert(
+          `Thank you, ${name}.\nYour alien doctor has received your report:\n"${symptom}"\n\nConsultation will begin shortly.`,
+        );
+      }
+      // Array of height images — replace filenames with your actual image files
+      const heightImages = [
+        "1_small_m.svg",
+        "2_small_e.svg",
+        "3_big_e.svg",
+        "4_big_m.svg",
+        "5_small_k2.svg",
+        "6_big_k2.svg",
+      ];
+      let heightIndex = 0; // tracks which image is currently shown
+      // Changes the height image when arrows are clicked
+      function changeHeight(delta) {
+        // move index forward or backward
+        heightIndex += delta;
+
+        // wrap around: if past the end, go to first image
+        // if before the start, go to last image
+        if (heightIndex < 0) heightIndex = heightImages.length - 1;
+        if (heightIndex >= heightImages.length) heightIndex = 0;
+
+        // update the img src to show the new image
+        document.getElementById("disp-height").src = heightImages[heightIndex];
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1019 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>M.A.S.S — Doctor Consultation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cossette+Texte:wght@400;700&family=Dongle&family=Noto+Sans+KR:wght@100..900&family=Outfit:wght@100..900&family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+                              /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                                 DESIGN TOKENS
+                              ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+                              :root {
+                                --black: #000000;
+                                --white: #ffffff;
+                                --green: #00ff41; /* neon green — brand accent */
+                                --gray-light: #f2f2f2;
+                                --gray-mid: #cccccc;
+                                --gray-text: #888888;
+                                --font-head: "Cossette Texte";
+                                --font-mono: "Cossette Texte";
+                                --radius: 999px; /* pill-shaped buttons */
+                                --transition: 0.25s ease;
+                              }
+                              *,
+                              *::before,
+                              *::after {
+                                box-sizing: border-box;
+                                margin: 0;
+                                padding: 0;
+                              }
+
+                              html,
+                              body {
+                                width: 100%;
+                                height: 100%;
+                                background: var(--white);
+                                font-family: var(--font-head);
+                                overflow: hidden; /* full viewport, no scroll */
+                              }
+
+
+
+                              /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                                 MAIN LAYOUT — two columns side by side
+                                 Left: alien doctor video feed
+                                 Right: conversation panel
+                              ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+                              .consultation {
+                                display: flex;
+                                width: 100vw;
+                                height: 100vh;
+                              }
+
+
+
+                              /* ── LEFT COLUMN ── alien image fills the left half */
+                              .left-panel {
+                                position: relative; /* for absolute children (camera box) */
+                                width: 50%;
+                                height: 100%;
+                                flex-shrink: 0;
+                                overflow: hidden;
+                                background: var(--black);
+                              }
+
+                              /*
+                                The alien doctor image.
+                                object-fit: cover makes it fill the panel without distortion.
+                                Replace src with your actual alien image file path.
+                              */
+                              .alien-img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                object-position: center top;
+                                display: block;
+                              }
+
+                              /*
+                                Camera box: bottom-left corner of the alien panel.
+                                Shows the user's webcam feed (or a gray placeholder).
+                                position: absolute places it over the alien image.
+                              */
+                              .camera-box {
+                                position: absolute;
+                                bottom: 24px;
+                                left: 24px;
+                                width: 160px;
+                                height: 200px;
+                                background: var(--gray-light);
+                                border-radius: 12px;
+                                overflow: hidden;
+                                /* subtle shadow so it stands out on dark background */
+                                box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+                              }
+
+                              /*
+                                The actual <video> element that shows webcam.
+                                transform: scaleX(-1) mirrors it so it looks like a selfie.
+                              */
+                              .camera-box video {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                transform: scaleX(-1); /* mirror effect */
+                              }
+
+                              /* Fallback text shown if camera is denied */
+                              .camera-fallback {
+                                width: 100%;
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-family: var(--font-mono);
+                                font-size: 0.65rem;
+                                color: var(--gray-text);
+                                text-align: center;
+                                padding: 8px;
+                              }
+
+                              /* ── RIGHT COLUMN ── conversation text + input */
+                              /* .right-panel {
+                                position: relative;
+                                flex: 1;
+                                height: 100%;
+                                padding: 48px 52px;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: flex-start;
+                                overflow-y: auto;
+                              } */
+                              .right-panel {
+                                flex: 1;
+                                height: 100%;
+                                padding: 48px 52px;
+                                display: flex;
+                                flex-direction: column;
+                                /* justify-content: center; ← change from flex-start to center */
+                                overflow-y: auto;
+                              }
+                              .btn-about{
+        display: flex;
+        width: 110px;
+        padding: 8px;
+        flex-direction: column;
+        /* justify-content: center; */
+        align-items: center;
+        gap: 8px;
+        font-family: Cossette Texte;
+        font-size: 1rem;
+        border-radius: 33px;
+        border: 3px solid #000;
+        background: #fff;
+        position: fixed;
+        top: 32px;
+        left: 32px;
+      }
+
+      .btn-about:hover {
+        background: var(--black);
+        color: var(--green);
+      }
+
+                              /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                                 CONVERSATION STEPS
+                                 Each .conv-step is hidden by default.
+                                 JS adds .active to show the current step.
+                              ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+                              .conv-step {
+                                display: none;
+                                flex-direction: column;
+                                gap: 12px;
+                                animation: fadeUp 0.5s ease;
+                              }
+                              .conv-step.active {
+                                display: flex;
+                              }
+
+                              @keyframes fadeUp {
+                                from {
+                                  opacity: 0;
+                                  transform: translateY(10px);
+                                }
+                                to {
+                                  opacity: 1;
+                                  transform: translateY(0);
+                                }
+                              }
+                              .fade-in {
+        opacity: 0;                          /* start invisible */
+        animation: fadeUp 1.5s ease 0.5s forwards;  /* ← 1s is the delay */
+      }
+
+
+
+                              /* Main question text — large, bold */
+                              .conv-text {
+                                font-size: clamp(2.4rem, 6vw, 4.5rem);
+                                font-weight: 700;
+                                letter-spacing: -0.02em;
+                                line-height: 1.1;
+
+                                min-height: 2em; /* reserves space during typewriter animation */
+                              }
+
+                              /* Korean subtitle — smaller, lighter */
+                              .conv-sub {
+                                font-family: Cossette Texte;
+                                font-size: clamp(0.75rem, 1.5vw, 1rem);
+                                font-weight: 400;
+                                color: var(--gray-text);
+                                margin-top: 16px;
+                                letter-spacing: 0.04em;
+                                word-spacing: 0.04em;
+                                min-height: 1.5em;
+                              }
+
+                              /* Spacer between question and input area */
+                              .conv-gap {
+                                margin-top: 200px;
+                              }
+
+                              /* "Write in keywords:" label above the input */
+                              .input-label {
+                                font-family: var(--font-mono);
+                                font-size: 1rem;
+                                font-weight: 400;
+                                color: var(--black);
+                                margin-bottom: 8px;
+                                margin: 0 auto;
+                              }
+
+                              /* Black pill input field */
+                              .keyword-input {
+                                /* background: var(--black);
+                                  color: #aaa;
+
+                                  border-radius: 999px;
+                                  padding: 14px 28px;
+                                  width: 100%;
+                                  max-width: 360px;
+                                  outline: none;
+                                  display: block; */
+                                  color: white;
+                                display: flex;
+                                width: 452.06px;
+                                padding: 14px 13.607px;
+                                justify-content: center;
+                                align-items: center;
+                                gap: 6.048px;
+                                border-radius: 23.435px;
+                                background: #000;
+
+                                border: none;
+                                text-align: center;
+
+                                font-family: var(--font-mono);
+                                font-size: 0.95rem;
+                                margin: 0 auto;
+
+
+                              }
+                              .keyword-input::placeholder {
+                                color: #555;
+                              }
+                              .keyword-input:focus {
+                                box-shadow: 0 0 0 2px var(--green);
+                              }
+                              .keyword-input:active {
+                          background: var(--black) !important;
+                          color: #ffffff !important;
+                           align-items: center;
+                           text-align: center;
+
+                          -webkit-text-fill-color: #ffffff !important;  /* ← this is the key fix */
+                        }
+
+
+
+                              /* Submit button — pill outline style */
+                              .btn-submit {
+                                margin-top: 20px;
+                                padding: 8px;
+                                width: 103px;
+                                flex-direction: column;
+                                align-items: center;
+                                gap: 8px;
+                                border-radius: 33px;
+                                border: 3px solid #000;
+                                background: #fff;
+                                font-family: var(--font-mono);
+                                font-size: 0.9rem;
+                                cursor: pointer;
+                                transition: 0.2s ease;
+                                /* position: absolute;
+                                left: 45%;
+                                /* display: inline-block; */
+                                /* bottom: 100px; */ */
+                                display: block; /* ← change from inline-block to block */
+                                margin-left: auto; /* ← add this */
+                                margin-right: auto;
+                              }
+                              .btn-submit:hover {
+                                background: var(--black);
+                                color: var(--white);
+                              }
+
+                              .btn-next {
+                                  display: flex;
+                          margin-top: 55px;
+                          width: 103px;
+                          padding: 8px;
+                          flex-direction: column;
+                          justify-content: center;
+                          align-items: center;
+                          gap: 8px;
+                          border-radius: 33px;
+                          border: 3px solid #000;
+                          background: #fff;
+                              }
+
+                              .btn-next:hover {
+                                background: var(--black);
+                                color: var(--white);
+                              }
+
+
+
+                              /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                                 CONVERSATION 4 — Diagnosis highlight
+                                 Green text on black background blocks
+                              ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+                              .diagnosis-highlight {
+                    background: var(--black);
+                    color: var(--green);
+                    font-size: clamp(2.4rem, 6vw, 4.5rem);   /* ← match conv-text size */
+                    font-weight: 700;
+                    line-height: 1.25;
+                    padding: 4px 0;
+                    display: inline;
+                  }
+
+                  .diagnosis-plain {
+                    font-size: clamp(2.4rem, 6vw, 4.5rem);   /* ← match conv-text size */
+                    font-weight: 700;
+                    margin-top: 4px;
+                  }
+
+                  .diag-sub-bold {
+                    letter-spacing: 0.04em;
+                     word-spacing: 0.04em;
+                     min-height: 1.5em;
+                    font-family: var(--font-mono);
+                    font-size: clamp(0.75rem, 1.2vw, 0.95rem); /* ← match conv-sub size */
+                    color: var(--gray-text);
+                    font-weight: 400;                           /* ← lighter to match other subs */
+                    margin-top: 6px;
+                  }
+
+               /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                CONVERSATION 6 — Prescription list
+               ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+              .prescription-list {
+                                font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+                                font-weight: 700;
+                                line-height: 1.4;
+                                margin-top: 8px;
+                              }
+              .prescription-sub {
+                                font-family: var(--font-mono);
+                                font-size: 0.8rem;
+                                color: var(--gray-text);
+                                margin-top: 4px;
+                              }
+               .prescription-footer {
+                                font-size: clamp(1rem, 1.8vw, 1.5rem);
+                                font-weight: 700;
+                                margin-top: 20px;
+                                line-height: 1.3;
+                              }
+               .prescription-footer-sub {
+                                font-family: var(--font-mono);
+                                font-size: 0.8rem;
+                                color: var(--gray-text);
+                                margin-top: 4px;
+                              }
+
+                              /* Print prescription button */
+              .btn-print {
+                                /* margin-top: 24px;
+                                padding: 11px 32px;
+                                border-radius: 999px;
+                                border: 2px solid var(--black);
+                                background: var(--white);
+
+                                cursor: pointer;
+                                transition: 0.2s ease;
+                                display: inline-block; */
+                                 cursor: pointer;
+                                transition: 0.2s ease;
+
+                                font-family: var(--font-mono);
+                                font-size: 0.88rem;
+                                display: flex;
+                               width: 200px;
+                              padding: 8px;
+                              flex-direction: column;
+                              justify-content: center;
+                              align-items: center;
+                              gap: 8px;
+                              border-radius: 33px;
+                              border: 3px solid #000;
+                              background: #FFF;
+                              display: block; /* ← change from inline-block to block */
+                                margin-left: auto; /* ← add this */
+                                margin-right: auto;
+                                margin-top: 200px;
+                              }
+
+
+              .btn-print:hover {
+                                background: var(--black);
+                                color: var(--white);
+                              }
+              .btn-home {
+                              margin-top: 20px;
+                                padding: 8px;
+                                width: 103px;
+                                flex-direction: column;
+                                align-items: center;
+                                gap: 8px;
+                                border-radius: 33px;
+                                border: 3px solid #000;
+                                background: #fff;
+                                font-family: var(--font-mono);
+                                font-size: 0.9rem;
+                                cursor: pointer;
+                                transition: 0.2s ease;
+                                /* position: absolute;
+                                left: 45%;
+                                /* display: inline-block; */
+                                /* bottom: 100px; */ */
+                                display: block; /* ← change from inline-block to block */
+                                margin-left: auto; /* ← add this */
+                                margin-right: auto;
+                              }
+
+            .btn-home:hover {
+              background: var(--black);
+              color: var(--white);
+            }
+    </style>
+  </head>
+  <body>
+    <div class="consultation">
+      <!-- ════════════════════════════════════════
+       LEFT PANEL — Alien doctor + camera box
+  ════════════════════════════════════════ -->
+      <div class="left-panel">
+        <!--
+      Alien doctor image.
+      Replace "alien.png" with your actual image file name.
+      The image fills the entire left half of the screen.
+    -->
+        <img
+          class="alien-img"
+          id="alienImg"
+          src="외게인.png"
+          alt="Alien Doctor"
+        />
+
+        <!--
+      Camera box: bottom-left corner.
+      The JS function startCamera() tries to access the webcam
+      and places the video feed inside this box.
+    -->
+        <div class="camera-box" id="cameraBox">
+          <!-- Video element — filled by JS -->
+          <video id="camVideo" autoplay muted playsinline></video>
+          <!-- Shown if camera permission is denied -->
+          <div class="camera-fallback" id="camFallback" style="display: none">
+            camera<br />unavailable
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════
+       RIGHT PANEL — Conversation flow
+  ════════════════════════════════════════ -->
+      <div class="right-panel">
+        <!-- ── CONVERSATION 1 ─────────────────────
+         Question 1 + keyword input + submit
+    ──────────────────────────────────────── -->
+        <div class="conv-step active" id="conv1">
+          <!--
+        .conv-text is where typewriter animation writes text.
+        It starts empty — JS fills it letter by letter.
+      -->
+          <div class="conv-text" id="text1"></div>
+          <div class="conv-sub" id="sub1"></div>
+
+          <div class="conv-gap"></div>
+
+          <!-- "Write in keywords:" label -->
+          <div class="input-label" style="display: none" id="label1">
+            Write in keywords:
+          </div>
+
+          <!--
+        id="input1" — JS reads this value later to build the diagnosis.
+        Stores the user's first symptom keyword.
+      -->
+          <input
+            class="keyword-input"
+            id="input1"
+            type="text"
+            style="display: none"
+            placeholder="Write keyword"
+          />
+
+          <!--
+        submit button → calls submitConv(1) in JS
+        which saves the input and moves to conversation 2
+      -->
+          <button
+            class="btn-submit"
+            id="submitBtn1"
+            style="display: none"
+            onclick="submitConv(1)"
+          >
+            submit
+          </button>
+          <button
+            class="btn-about"
+            onclick="window.location.href = 'main.html'"
+          >
+            home
+          </button>
+        </div>
+
+        <!-- ── CONVERSATION 2 ─────────────────────
+         Question 2 + keyword input + submit
+    ──────────────────────────────────────── -->
+        <div class="conv-step" id="conv2">
+          <div class="conv-text" id="text2"></div>
+          <div class="conv-sub" id="sub2"></div>
+
+          <div class="conv-gap"></div>
+          <div class="input-label" style="display: none" id="label2">
+            Write in keywords:
+          </div>
+
+          <!--
+        id="input2" — stores the user's second answer
+        (environmental/inner changes)
+      -->
+          <input
+            class="keyword-input"
+            id="input2"
+            type="text"
+            style="display: none"
+            placeholder="Write keyword"
+          />
+          <button
+            class="btn-submit"
+            id="submitBtn2"
+            style="display: none"
+            onclick="submitConv(2)"
+          >
+            submit
+          </button>
+          <button
+            class="btn-about"
+            onclick="window.location.href = 'main.html'"
+          >
+            home
+          </button>
+        </div>
+
+        <!-- ── CONVERSATION 3 ─────────────────────
+         "Ok." — brief acknowledgement, then auto-advances
+    ──────────────────────────────────────── -->
+        <div class="conv-step" id="conv3">
+          <div class="conv-text" id="text3"></div>
+          <div class="conv-sub" id="sub3"></div>
+        </div>
+
+        <!-- ── CONVERSATION 4 ─────────────────────
+         Diagnosis — uses words from input1 & input2
+    ──────────────────────────────────────── -->
+        <div class="conv-step" id="conv4">
+          <!-- "According to M.A.S.S human analysis..." -->
+          <div class="conv-text" id="text4"></div>
+          <div class="conv-sub" id="sub4"></div>
+
+          <!-- Diagnosis name: green highlight + "syndrome." -->
+          <div style="margin-top: 20px">
+            <!--
+          id="diagName" — JS injects "[input2] [input1]" here
+          wrapped in green-on-black highlight spans
+        -->
+            <div id="diagName"></div>
+            <div class="diagnosis-plain" id="diagPlain"></div>
+            <div class="diag-sub-bold" id="diagSubBold"></div>
+          </div>
+        </div>
+
+        <!-- ── CONVERSATION 5 ─────────────────────
+         Symptom description — auto after 3s
+    ──────────────────────────────────────── -->
+        <div class="conv-step" id="conv5">
+          <div class="conv-text" id="text5"></div>
+          <div class="conv-sub" id="sub5"></div>
+        </div>
+
+        <!-- ── CONVERSATION 6 ─────────────────────
+         Prescription — random 3 items + print button
+    ──────────────────────────────────────── -->
+        <div class="conv-step" id="conv6">
+          <!-- "I'll prescribe you:" -->
+          <div class="conv-text" id="text6"></div>
+          <div class="conv-sub" id="sub6"></div>
+
+          <!-- Random 3 prescription items (filled by JS) -->
+          <div class="prescription-list" id="prescList"></div>
+          <div class="prescription-sub" id="prescSub"></div>
+
+          <!-- "Print your prescription..." -->
+          <div class="prescription-footer" id="prescFooter"></div>
+          <div class="prescription-footer-sub" id="prescFooterSub"></div>
+
+          <!--
+        Print button — calls window.print() to open
+        the browser's print dialog so the user can
+        print or save as PDF.
+      -->
+          <button
+            class="btn-print"
+            id="printBtn"
+            style="display: none"
+            onclick="window.print()"
+          >
+            print a prescription
+          </button>
+          <button
+            class="btn-home"
+            id="homeBtn"
+            style="display: none"
+            onclick="window.location.href = 'main.html'"
+          >
+            home
+          </button>
+        </div>
+      </div>
+      <!-- end right-panel -->
+    </div>
+    <!-- end consultation -->
+
+    <script>
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           WEBCAM
+           startCamera() asks browser permission for the
+           camera. If granted, pipes the stream into <video>.
+           If denied, shows the gray fallback box instead.
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      async function startCamera() {
+        const video = document.getElementById("camVideo");
+        const fallback = document.getElementById("camFallback");
+        try {
+          // Request video only (no microphone needed)
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+          });
+          video.srcObject = stream;
+          video.style.display = "block";
+          fallback.style.display = "none";
+        } catch (e) {
+          // Camera denied or unavailable — show placeholder text
+          video.style.display = "none";
+          fallback.style.display = "flex";
+        }
+      }
+      startCamera(); // run immediately on page load
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           TYPEWRITER FUNCTION
+           typeWriter(elementId, text, speed, callback)
+
+           - elementId : the id of the DOM element to write into
+           - text      : the full string to type out
+           - speed     : milliseconds between each character (default 30ms)
+           - callback  : optional function to call when typing is done
+
+           It works by keeping an index (i) and using setTimeout
+           to add one character at a time.
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      function typeWriter(elementId, text, speed = 30, callback = null) {
+        const el = document.getElementById(elementId);
+        el.textContent = ""; // clear any existing text
+        let i = 0;
+
+        function tick() {
+          if (i < text.length) {
+            el.textContent += text[i]; // add one character
+            i++;
+            setTimeout(tick, speed); // schedule the next character
+          } else if (callback) {
+            callback(); // all done — run the callback
+          }
+        }
+        tick(); // start
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           SHOW CONVERSATION STEP
+           showConv(n) hides all steps, shows step n,
+           then starts the typewriter animation for that step.
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      function showConv(n) {
+        // Hide all conversation steps
+        document
+          .querySelectorAll(".conv-step")
+          .forEach((s) => s.classList.remove("active"));
+        // Show the target step
+        document.getElementById("conv" + n).classList.add("active");
+        // Run the typewriter for this step
+        runTypewriter(n);
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           STORED USER ANSWERS
+           These variables save what the user typed
+           so later conversations can use them.
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      let answer1 = ""; // from input1 (symptom / irregularity)
+      let answer2 = ""; // from input2 (environmental / inner change)
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           SUBMIT HANDLER
+           submitConv(n) is called when the user clicks
+           "submit" in conversation n.
+           It reads the input, saves it, then moves forward.
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      function submitConv(n) {
+        if (n === 1) {
+          // Save answer from conversation 1
+          answer1 = document.getElementById("input1").value.trim() || "unknown";
+          showConv(2);
+        } else if (n === 2) {
+          // Save answer from conversation 2
+          answer2 = document.getElementById("input2").value.trim() || "unknown";
+          showConv(3);
+        }
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           PRESCRIPTION DATA
+           Two parallel arrays (English + Korean).
+           JS picks 3 random items from each.
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      const prescEN = [
+        "pet cat",
+        "eat potato chips",
+        "watching anime for 1 hour",
+        "sleep",
+        "go to Karaoke",
+        "play Nintendo Switch",
+        "play Stardew Valley",
+      ];
+      const prescKO = [
+        "고양이 만지기",
+        "감자칩 먹기",
+        "애니메이션 1시간 시청",
+        "자기",
+        "노래방 가기",
+        "닌텐도 스위치 플레이하기",
+        "스타듀벨리 플레이하기",
+      ];
+
+      /*
+          pickRandom(arr, n) — returns n unique random items from arr.
+          It shuffles the array and slices the first n items.
+        */
+      function pickRandom(arr, n) {
+        const shuffled = [...arr].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, n);
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           TYPEWRITER ROUTER
+           runTypewriter(n) decides what text to type
+           for each conversation step, and handles
+           auto-advance timing for steps 3, 4, 5.
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      function runTypewriter(n) {
+        if (n === 1) {
+          typeWriter(
+            "text1",
+            "Hello.\nWhat sort of irregularities have you been experiencing?",
+            28,
+            () =>
+              typeWriter(
+                "sub1",
+                "안녕하세요.\n어떤 불편함으로 이곳을 찾으셨나요?",
+                20,
+                () => {
+                  // show label, input, and button together after all text is typed
+                  document.getElementById("label1").style.display = "block";
+                  document.getElementById("input1").style.display = "block";
+                  document.getElementById("submitBtn1").style.display = "block";
+                  document.getElementById("label1").classList.add("fade-in");
+                  document.getElementById("input1").classList.add("fade-in");
+                  document
+                    .getElementById("submitBtn1")
+                    .classList.add("fade-in");
+                },
+              ),
+          );
+        } else if (n === 2) {
+          typeWriter(
+            "text2",
+            "Have there been any recent changes in your environment or inner state?",
+            28,
+            () =>
+              typeWriter(
+                "sub2",
+                "최근에 환경적 변화나 심리적 변화가 있었나요?",
+                20,
+                () => {
+                  // show label, input, and button together after all text is typed
+                  document.getElementById("label2").style.display = "block";
+                  document.getElementById("input2").style.display = "block";
+                  document.getElementById("submitBtn2").style.display = "block";
+                  document.getElementById("label2").classList.add("fade-in");
+                  document.getElementById("input2").classList.add("fade-in");
+                  document
+                    .getElementById("submitBtn2")
+                    .classList.add("fade-in");
+                },
+              ),
+          );
+        } else if (n === 3) {
+          // "Ok." — type it, then wait 3 seconds and auto-advance to conv4
+          typeWriter("text3", "Ok.", 40, () =>
+            typeWriter(
+              "sub3",
+              "알겠습니다.",
+              30,
+              () => setTimeout(() => showConv(4), 3000), // 3 second pause
+            ),
+          );
+        } else if (n === 4) {
+          // Type the intro text first
+          typeWriter(
+            "text4",
+            "According to M.A.S.S human analysis,\nyour diagnosis is this:",
+            28,
+            () => {
+              typeWriter(
+                "sub4",
+                "M.A.S.S 인간 분석학에 따르면,\n당신의 진단명은 이렇습니다:",
+                20,
+                () => {
+                  // After intro is typed, show the diagnosis name with green highlight
+                  buildDiagnosis();
+                  // Wait 3 seconds then go to conv5
+                  setTimeout(() => showConv(5), 6000);
+                },
+              );
+            },
+          );
+        } else if (n === 5) {
+          // Symptom description using both answers
+          const en = `The symptom of this syndrome is ${answer1} because of ${answer2}.`;
+          const ko = `이 증후군의 증상은 ${answer2} 때문에 ${answer1} 하는 것입니다.`;
+          typeWriter("text5", en, 28, () =>
+            typeWriter(
+              "sub5",
+              ko,
+              20,
+              // Wait 3 seconds then go to conv6
+              () => setTimeout(() => showConv(6), 3000),
+            ),
+          );
+        } else if (n === 6) {
+          typeWriter("text6", "I'll prescribe you:", 28, () => {
+            typeWriter("sub6", "당신에게 처방해 드리겠습니다:", 20, () =>
+              buildPrescription(),
+            );
+          });
+        }
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           BUILD DIAGNOSIS (conversation 4)
+           Creates the green-highlight diagnosis text
+           by injecting HTML into #diagName.
+           Format: "[answer2] [answer1] syndrome."
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      function buildDiagnosis() {
+        const diagName = document.getElementById("diagName");
+        const diagPlain = document.getElementById("diagPlain");
+        const diagSubBold = document.getElementById("diagSubBold");
+
+        // clear first
+        diagName.innerHTML = "";
+        diagPlain.textContent = "";
+        diagSubBold.textContent = "";
+
+        const fullText = `${answer2} ${answer1}`;
+        let i = 0;
+
+        // type the diagnosis name letter by letter into a green-highlight span
+        function typeDiag() {
+          if (i < fullText.length) {
+            // build the span with text typed so far
+            diagName.innerHTML = `<span class="diagnosis-highlight">${fullText.slice(0, i + 1)}</span>`;
+            i++;
+            setTimeout(typeDiag, 60); // slightly slower for dramatic effect
+          } else {
+            // finished typing name → now type "syndrome."
+            typeWriter("diagPlain", "syndrome.", 50, () => {
+              // then type the Korean line
+              const ko = `[${answer2}으로 인해 ${answer1}하는] 증후군입니다.`;
+              typeWriter("diagSubBold", ko, 30);
+            });
+          }
+        }
+        typeDiag();
+      }
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           BUILD PRESCRIPTION (conversation 6)
+           Picks 3 random items from the list and
+           displays them in English and Korean.
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      function buildPrescription() {
+        // Pick 3 random indices
+        const indices = [0, 1, 2, 3, 4, 5, 6]
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 3);
+
+        const enItems = indices.map((i) => prescEN[i]);
+        const koItems = indices.map((i) => prescKO[i]);
+
+        const enText = enItems.join(", ");
+        const koText = koItems.join(", ");
+
+        // clear all fields first
+        document.getElementById("prescList").textContent = "";
+        document.getElementById("prescSub").textContent = "";
+        document.getElementById("prescFooter").textContent = "";
+        document.getElementById("prescFooterSub").textContent = "";
+
+        // Step 1: type English prescription list
+        typeWriter("prescList", enText, 40, () => {
+          // Step 2: type Korean subtitle after English finishes
+          typeWriter("prescSub", koText, 25, () => {
+            // Step 3: type "Print your prescription..." after Korean finishes
+            typeWriter(
+              "prescFooter",
+              "Print your prescription,\nand do it three times a day.",
+              35,
+              () => {
+                // Step 4: type Korean footer after English footer finishes
+                typeWriter(
+                  "prescFooterSub",
+                  "처방전을 출력하고, 하루에 세 번 실천하세요.",
+                  25,
+                  () => {
+                    // Step 5: show the print button after everything is typed
+                    document.getElementById("printBtn").style.display =
+                      "inline-block";
+                    document.getElementById("homeBtn").style.display = "block";
+                    document
+                      .getElementById("printBtn")
+                      .classList.add("fade-in");
+                    document.getElementById("homeBtn").classList.add("fade-in");
+                  },
+                );
+              },
+            );
+          });
+        });
+      }
+      /* ── RANDOM ALIEN IMAGE ─────────────────────────────
+   Add all your alien image filenames to this array.
+   One will be picked randomly every time the page loads.
+─────────────────────────────────────────────────────── */
+      const alienImages = [
+        "외게인.png", // ← your existing alien
+        "d2.png", // ← add more alien images here
+        "d3.png",
+        "d4.png",
+        "d5.png",
+      ];
+
+      // pick a random index between 0 and the array length
+      const randomIndex = Math.floor(Math.random() * alienImages.length);
+
+      // set the alien image src to the randomly picked file
+      document.getElementById("alienImg").src = alienImages[randomIndex];
+
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           START
+           When the page loads, conversation 1 is already
+           .active in HTML — just start its typewriter.
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      window.addEventListener("load", () => runTypewriter(1));
+    </script>
+  </body>
+</html>

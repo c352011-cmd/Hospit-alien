@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>about M.A.S.S</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cossette+Texte:wght@400;700&family=Dongle&family=Noto+Sans+KR:wght@100..900&family=Outfit:wght@100..900&family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style>
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --green: #00ff41; /* neon green — brand accent */
+      --gray-light: #f2f2f2;
+      --gray-mid: #cccccc;
+      --gray-text: #888888;
+      --font-head: "Cossette Texte";
+      --font-mono: Cossette Texte;
+      --radius: 999px; /* pill-shaped buttons */
+      --transition: 0.25s ease;
+    }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: var(--white);
+      color: var(--black);
+      font-family: Cossette Texte;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: url(backlogo.svg);  /* ← replace with your image file name */
+  
+  background-position: center;  /* centers the image */
+  background-repeat: no-repeat; /* prevents the image from tiling */
+  background-attachment: fixed;
+    }
+
+    #screen h1 {
+      color: #000;
+      text-align: center;
+      font-family: "Futura 100";
+      font-size: 96px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 51.956px; /* 54.015% */
+      letter-spacing: -2.886px;
+    }
+
+    #screen h2 {
+      color: #000;
+
+      text-align: center;
+      font-family: JJGothic;
+      font-size: 40px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 117px; /* 285.68% */
+      letter-spacing: -1.228px;
+    }
+
+    .screen {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 48px 24px;
+      text-align: center;
+      animation: fadeIn 0.4s ease;
+      height: 400vh;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    h2 {
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      margin-top: 6px;
+    }
+    h3 {
+      font-family: Cossette Texte;
+      font-size: clamp(0.75rem, 1.5vw, 1rem);
+      font-weight: 400;
+      color: var(--gray-text);
+      margin-top: 5px;
+      letter-spacing: 0.04em;
+      word-spacing: 0.04em;
+    }
+
+    .btn-about {
+      display: flex;
+      width: 110px;
+      padding: 8px;
+      flex-direction: column;
+      /* justify-content: center; */
+      align-items: center;
+      gap: 8px;
+      font-family: Cossette Texte;
+      font-size: 1rem;
+      border-radius: 33px;
+      border: 3px solid #000;
+      background: #fff;
+      position: fixed;
+      top: 32px;
+      left: 32px;
+    }
+
+    .btn-about:hover {
+      background: var(--black);
+      color: var(--green);
+    }
+
+    .info {
+      text-align: center;
+      font-family: var(--font-mono);
+      margin-top: 50px;
+      font-size: 1.5rem;
+      margin-left: 20%;
+      margin-right: 20%;
+    }
+
+    .subinfo {
+        text-align: center;
+      font-family: var(--font-mono);
+      margin-top: 10px;
+      
+      margin-left: 20%;
+      margin-right: 20%;
+    }
+
+    .archive-png {
+      align-items: right;
+      margin-left: 100rem;
+    }
+/*========================= orbit ========================*/
+    .orbit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+/* the ring that holds all 4 nodes */
+.orbit-ring {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* smooth rotation */
+}
+
+/* each node is positioned absolutely around the ring */
+.orbit-node {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  
+  transition: transform 0.6s ease;
+}
+
+/* the visible circle inside each node */
+.orbit-dot {
+  width: 40px;
+  
+  height: 40px;
+  border-radius: 50%;
+  background: var(--black);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.orbit-dot:hover {
+  transform: scale(1.15);
+}
+
+/* green highlight for selected node */
+.orbit-node.selected .orbit-dot {
+  background: var(--green);
+  
+  border: 8px solid var(--black);    /* ← add this */
+  box-sizing: border-box;
+}
+
+/* position each node at top, right, bottom, left */
+/* node 0 — top */
+#node0 { top: 0;   left: 50%; transform: translateX(-50%); }
+/* node 1 — right */
+#node1 { top: 50%; right: 0;  transform: translateY(-50%); }
+/* node 2 — bottom */
+#node2 { bottom: 0; left: 50%; transform: translateX(-50%); }
+/* node 3 — left */
+#node3 { top: 50%; left: 0;  transform: translateY(-50%); }
+
+/* the connecting ring lines between nodes */
+.orbit-ring::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 8px solid var(--black);
+  pointer-events: none; /* clicks pass through to nodes */
+}
+
+/* info text box below the ring */
+.orbit-info {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--black);
+  text-align: center;
+  max-width: 400px;
+  min-height: 60px;
+  line-height: 1.6;
+  animation: fadeUp 0.4s ease;
+}
+
+.orbit-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* perfectly centers it */
+  width: 50px;                      /* size of center circle */
+  height: 50px;
+  border-radius: 50%;               /* makes it a circle */
+  background: var(--white);         /* white fill */
+  border: 5px solid var(--black);   /* black border */
+  z-index: 1;                       /* sits on top of the ring line */
+  pointer-events: none;             /* clicks pass through to nodes behind */
+}
+
+    /* .backLogo {
+      position: fixed;
+      align-items: center;
+      width: 958px;
+      height: 620px;
+    } */
+  </style>
+
+  <body>
+    <div class="screen" id="about">
+      <h1>M.A.S.S</h1>
+      <h2>Medical Association of Space Species</h2>
+      <h3>범 우주적 생명 의료 연합</h3>
+      <div class="info">
+        M.A.S.S is the Space Alliance Medical Services Agency,established after
+        the Space Peace Agreement of 2897 guarantee pan-space life rights for
+        organic matter. We aim for providing the best customized healthcare
+        regardless of species.
+      </div>
+      <h3 class="subinfo"> M.A.S.S는 2897년, 모든 유기체의 생명권을 보장하는 내용을 담은
+         우주 평화 협정 이후 세워진 범 우주적 생명 의료 연합입니다.
+         우리는 종에 구애받지 않는 개인화된 의료 서비스를 제공합니다.
+
+      </h3>
+      <button class="btn-about" onclick="window.location.href = 'main.html'">
+        back
+      </button>
+    <!-- </p>
+    <div class="backLogo">
+      <img src="backlogo.svg" alt="backLogo" />
+    </p> -->
+
+    <div class="orbit-container">
+  
+  <!-- the ring graphic with 4 circle buttons -->
+  <div class="orbit-ring" id="orbitRing">
+    <div class="orbit-center"></div>
+    
+    <div class="orbit-node" id="node0" onclick="selectNode(0)">
+      <div class="orbit-dot"></div>
+    </div>
+    <div class="orbit-node" id="node1" onclick="selectNode(1)">
+      <div class="orbit-dot"></div>
+    </div>
+    <div class="orbit-node" id="node2" onclick="selectNode(2)">
+      <div class="orbit-dot"></div>
+    </div>
+    <div class="orbit-node" id="node3" onclick="selectNode(3)">
+      <div class="orbit-dot"></div>
+    </div>
+
+  </div>
+
+  <!-- information appears here when a circle is clicked -->
+  <div class="orbit-info" id="orbitInfo"></div>
+
+</div>
+  </body>
+<script>
+  const nodeData = [
+  {
+    title: 'History',
+    info: 'M.A.S.S was established after the Space Peace Agreement to guarantee medical rights for all organic matter.'
+  },
+  {
+    title: 'Pan-species care',
+    info: 'We provide customized healthcare for over 2,400 recognized species across 14 star systems.'
+  },
+  {
+    title: 'Our doctors',
+    info: 'Our medical staff consists of certified practitioners from Earth, Mars, and K2-18b civilizations.'
+  },
+  {
+    title: 'Mission',
+    info: 'To ensure no living being is denied medical treatment regardless of their planetary origin or biology.'
+  }
+];
+
+/* tracks which node is currently on top (index 0 = top position) */
+let currentRotation = 0;
+let selectedNode = null;
+
+function selectNode(index) {
+  const ring = document.getElementById('orbitRing');
+  const info = document.getElementById('orbitInfo');
+
+  /* remove selected class from all nodes */
+  document.querySelectorAll('.orbit-node').forEach(n => n.classList.remove('selected'));
+
+  /* add selected class to clicked node */
+  document.getElementById('node' + index).classList.add('selected');
+
+  /*
+    Calculate how much to rotate so the clicked node
+    moves to the top position.
+    Each node is 90deg apart (360 / 4 = 90).
+    node0=0deg, node1=90deg, node2=180deg, node3=270deg
+  */
+  const nodeAngle = index * 90;
+  currentRotation = -nodeAngle; /* negative rotates it to top */
+
+  /* apply rotation to the whole ring */
+  ring.style.transform = `rotate(${currentRotation}deg)`;
+
+  /*
+    Counter-rotate each dot so the dots themselves
+    stay upright while the ring spins.
+  */
+  document.querySelectorAll('.orbit-dot').forEach((dot, i) => {
+    dot.style.transform = `rotate(${-currentRotation}deg)`;
+  });
+
+  /* show the info for the clicked node */
+  info.innerHTML = `
+    <strong style="font-size:1.1rem; display:block; margin-bottom:8px;">
+      ${nodeData[index].title}
+    </strong>
+    ${nodeData[index].info}
+  `;
+
+  selectedNode = index;
+}
+</script>
+</html>

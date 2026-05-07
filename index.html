@@ -1,35 +1,135 @@
-//! 엔터 누르면 자동생성
+! 엔터 누르면 자동생성
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="alien.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cossette+Texte:wght@400;700&family=Dongle&family=Outfit:wght@100..900&family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&display=swap"
+      rel="stylesheet"
+    />
     <title>MASS</title>
   </head>
+  <style>
+    .one {
+      text-align: center;
+      margin-top: 10px;
+      display: flex;
+  flex-direction: column;
+  gap: 12px;
+    }
+    .check-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+}
+
+/* hide the default browser checkbox */
+.check-item input[type="checkbox"] {
+  display: none;
+}
+
+/* custom checkbox box */
+.checkmark {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--black);
+  border-radius: 4px;
+  background: var(--white);
+  flex-shrink: 0;
+  transition: 0.2s ease;
+  position: relative;
+}
+
+/* checkmark tick — shown when checked */
+.check-item input:checked + .checkmark::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  width: 6px;
+  height: 12px;
+  border: 2px solid var(--black);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* background turns green when checked */
+.check-item input:checked + .checkmark {
+  background: var(--green);
+  border-color: var(--black);
+}
+
+/* text gets strikethrough when checked */
+.check-item input:checked ~ .check-text {
+  text-decoration: line-through;
+  color: var(--green);
+}
+
+
+
+  
+  </style>
   <body>
     <h1>welcome to alien hospital ~.~</h1>
     <h2>~(*.*)~ your doctor is waiting ~(\./)~</h2>
     <p>
-      <strong><em> association of space species</em></strong> provides you the
-      best quality of medical service.<br />
+      <strong class="mass"><em> association of space species</em></strong
+      ><br />* this is demo version *<br />
       what is your species?
     </p>
-    <h2>hello</h2>
-    <p>
-        <ul>
+    <br /><br />
+    <h2 class="one">
+      hello<br />
+      what species are you?
+    </h2>
+    <br />
+    <p class="one">
+      <div class="one">
+  <label class="one">
+    <input type="checkbox" />
+    <span class="checkmark"></span>
+    <span class="check-text">human</span>
+  </label>
+
+  <label class="one">
+    <input type="checkbox" />
+    <span class="checkmark"></span>
+    <span class="check-text">banana</span>
+  </label>
+
+  <label class="one">
+    <input type="checkbox" />
+    <span class="checkmark"></span>
+    <span class="check-text">alien</span>
+  </label>
+</div>
+      
+    </p>
+
+    <!-- <p>
+        <ul class="one">
         <li>human</li>
         <li>cat</li>
         <li>banana</li>
         <li>ant</li>
         </ul>
 
-         <ol>
+         <ol class="one">
         <li>human</li>
         <li>cat</li>
         <li>banana</li>
         <li>ant</li>
-        </0l>
+        </ol>
+        
         <dr />
 
         <h2>warning</h2>
@@ -52,7 +152,7 @@
         <li>
             <a href="h1">restart ttttt</a>
         </li>
-    </p>
+    </p>*/ -->
   </body>
 </html>
-//이미지 드래그앤드롭해서 우클릭하고 릴레이티브 패스 카피
+<!-- //이미지 드래그앤드롭해서 우클릭하고 릴레이티브 패스 카피 -->

@@ -1,0 +1,48 @@
+/*외부 파일 쓰면 외부 css - style 코드 쓰면 내부 css -> html에 css 기능을 불러와 쓰는 것
+선택자 + 선언 블록 -> 선택자가 html 파일과 연결하는 기능/ 선언블록이 구체적인 외형 선언
+reset.css -> html의 기본 스타일은 각 브라우저마다 다름 -> 리셋 코드로 전부다 백지화
+단위에는 절대 단위와 상대 단위가 있는데 -> 상대 단위는 부모요소나 브라우저에 맞춰 상대적으로 적용되는 값
+마이크로 타이포그래피... 요것도 원래 css.. 그래서 style 태그에 잇엇군
+글고 피피티에 화면 레이아웃 부분을 열심히 참고하자... 많이 헷갈렸으니까
+와 빈 공백도 컴퓨터가 아스키 코드로 해석한대
+r그리고 탑다운 방식이라 아래 있는 코드가 최종 반영됨*/
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: black;
+  color: 33FF00;
+  font-family: "Cossette Texte";
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 400;
+  line-height: 1.7;
+  word-spacing: 0.2px;
+  word-break: keep-all; /*하이픈 빼기*/
+  text-align: center;
+  margin: auto
+  padding: 20;
+}
+h1{
+    font-size: 50px;
+}
+/* ul li {
+   text-align: left;
+} */
+.mass {
+    font-family: 'Courier New', Courier, monospace;
+}
+/* id는 원앤온리(#사용)... class(.사용)는 여러 대상 선택 가능*/
+
+.one {
+    margin: 20;
+    padding: 20;
+    border: 2cm;
+    text-align: left;
+    padding: 40;
+}
+
+.one :hover {
+    color: magenta;
+}
