@@ -16,67 +16,88 @@
   </head>
   <style>
     .one {
-      text-align: center;
-      margin-top: 10px;
       display: flex;
-  flex-direction: column;
-  gap: 12px;
+      flex-direction: row; /* ← changes from column to side by side */
+      flex-wrap: wrap; /* ← wraps to next line if too many items */
+      gap: 16px; /* ← space between each item */
+      justify-content: center;
+      text-align: center;
+    }
+    .one2 {
+      display: flex;
+      flex-direction: row; /* ← changes from column to side by side */
+      flex-wrap: wrap; /* ← wraps to next line if too many items */
+      gap: 16px; /* ← space between each item */
+      justify-content: center;
+      text-align: center;
+      margin-top: -30;
     }
     .check-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 1rem;
-}
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+    }
 
-/* hide the default browser checkbox */
-.check-item input[type="checkbox"] {
-  display: none;
-}
+    /* hide the default browser checkbox */
+    .check-item input[type="checkbox"] {
+      display: none;
+    }
 
-/* custom checkbox box */
-.checkmark {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--black);
-  border-radius: 4px;
-  background: var(--white);
-  flex-shrink: 0;
-  transition: 0.2s ease;
-  position: relative;
-}
+    /* custom checkbox box */
+    .checkmark {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--black);
+      border-radius: 4px;
+      background: var(--white);
+      flex-shrink: 0;
+      transition: 0.2s ease;
+      position: relative;
+    }
 
-/* checkmark tick — shown when checked */
-.check-item input:checked + .checkmark::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 6px;
-  width: 6px;
-  height: 12px;
-  border: 2px solid var(--black);
-  border-top: none;
-  border-left: none;
-  transform: rotate(45deg);
-}
+    /* checkmark tick — shown when checked */
+    .check-item input:checked + .checkmark::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 6px;
+      width: 6px;
+      height: 12px;
+      border: 2px solid var(--black);
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
 
-/* background turns green when checked */
-.check-item input:checked + .checkmark {
-  background: var(--green);
-  border-color: var(--black);
-}
+    /* background turns green when checked */
+    .check-item input:checked + .checkmark {
+      background: var(--green);
+      border-color: var(--black);
+    }
 
-/* text gets strikethrough when checked */
-.check-item input:checked ~ .check-text {
-  text-decoration: line-through;
-  color: var(--green);
-}
+    /* text gets strikethrough when checked */
+    .check-item input:checked ~ .check-text {
+      text-decoration: line-through;
+      color: var(--green);
+    }
 
+    .mainB {
+      align-items: center;
+      width: 18rem;
+      height: 9rem;
+      font-family: FUTURA;
+      font-size: 2rem;
+      margin-top: 50px;
+      border-radius: 200px;
+    }
 
-
-  
+    .mainB:hover {
+      background: rgb(0, 255, 0);
+      text-color: var(--black);
+    }
   </style>
   <body>
     <h1>welcome to alien hospital ~.~</h1>
@@ -92,28 +113,30 @@
       what species are you?
     </h2>
     <br />
-    <p class="one">
-      <div class="one">
-  <label class="one">
-    <input type="checkbox" />
-    <span class="checkmark"></span>
-    <span class="check-text">human</span>
-  </label>
 
-  <label class="one">
-    <input type="checkbox" />
-    <span class="checkmark"></span>
-    <span class="check-text">banana</span>
-  </label>
+    <div class="one2">
+      <label>
+        <input type="checkbox" />
+        <span class="checkmark"></span>
+        <span class="check-text">human</span>
+      </label>
 
-  <label class="one">
-    <input type="checkbox" />
-    <span class="checkmark"></span>
-    <span class="check-text">alien</span>
-  </label>
-</div>
-      
-    </p>
+      <label>
+        <input type="checkbox" />
+        <span class="checkmark"></span>
+        <span class="check-text">banana</span>
+      </label>
+
+      <label>
+        <input type="checkbox" />
+        <span class="checkmark"></span>
+        <span class="check-text">alien</span>
+      </label>
+    </div>
+
+    <button class="mainB" onclick="window.location.href = 'main.html'">
+      meet doctor
+    </button>
 
     <!-- <p>
         <ul class="one">
