@@ -236,14 +236,16 @@
 /* info text box below the ring */
 .orbit-info {
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 2rem;
   color: var(--black);
   text-align: center;
-  max-width: 400px;
+  max-width: 500px;
   min-height: 60px;
   line-height: 1.6;
   animation: fadeUp 0.4s ease;
 }
+
+
 
 .orbit-center {
   position: absolute;
@@ -321,7 +323,25 @@
   const nodeData = [
   {
     title: 'History',
-    info: 'M.A.S.S was established after the Space Peace Agreement to guarantee medical rights for all organic matter.'
+    info: `
+    <p>The first contact: the 20th century<br /><br />
+        In the mid-1900s, in England on Earth, within the Solar System.
+        <br /><br />
+        It was the first attempt by a species from K2-18b to contact the species of Earth.
+        Earth named this contact “crop circles.”
+        </p>
+
+      <img src="info1.svg" style="width:100%; margin: 12px 0;" />
+
+      <p><br /><br />The first interaction<br /><br />
+        After the first contact, other crop circles — not made by the K2-18b species — were observed as “the first answer from humans.”
+        </p>
+
+      <img src="info2.svg" style="width:100%; margin: 12px 0;" />
+
+      <p>Since the first contact was successful, attempts at direct contact followed, including 
+        <a href="https://en.wikipedia.org/wiki/Barney_and_Betty_Hill_incident">the meeting with Barney Hill and Betty Hill in 1961.<a></p>
+      <img src="info2.svg" style="width:100%; margin: 12px 0;" /> `
   },
   {
     title: 'Pan-species care',

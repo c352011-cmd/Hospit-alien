@@ -863,6 +863,9 @@ padding: 18px;
 
   if (id === "screenW") {
     setTimeout(() => {
+        // ← 이름을 localStorage에 저장
+    const name = document.getElementById("nameInput").value.trim();
+    if (name) localStorage.setItem("patientName", name);
       window.location.href = "conversation.html"; // ← opens conversation.html after 2.5s
     }, 2500);
   }

@@ -456,6 +456,223 @@
               background: var(--black);
               color: var(--white);
             }
+            /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   처방전 스타일
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#prescriptionArea {
+  width: 520px;
+  background: #fff;
+  border: 2.5px solid #000;
+  font-family: 'Noto Sans KR', sans-serif;
+  display: none; /* 화면에서는 숨김 */
+}
+
+.rx-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1.4em;
+  padding: 22px 0 18px;
+  padding-right: 1.4em;
+  border-bottom: 2.5px solid #000;
+}
+
+.rx-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-bottom: 2.5px solid #000;
+}
+.rx-info-table td {
+  border: 1.5px solid #000;
+  padding: 0;
+  vertical-align: middle;
+}
+.rx-info-table td:first-child  { border-left: none; }
+.rx-info-table td:last-child   { border-right: none; }
+.rx-info-table tr:first-child td { border-top: none; }
+.rx-info-table tr:last-child td  { border-bottom: none; }
+
+.td-hanja {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-weight: 700;
+  font-size: 13px;
+  text-align: center;
+  padding: 10px 8px !important;
+  width: 26px;
+  letter-spacing: 0.2em;
+}
+.td-label {
+  font-weight: 700;
+  font-size: 13px;
+  text-align: center;
+  padding: 10px 12px !important;
+  white-space: nowrap;
+  letter-spacing: 0.15em;
+}
+.td-value {
+  color: #cc0000;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 12px !important;
+}
+.td-clinic-vert {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-weight: 700;
+  font-size: 12px;
+  text-align: center;
+  padding: 8px !important;
+  width: 22px;
+  letter-spacing: 0.5em;
+}
+.td-clinic-label {
+  font-weight: 700;
+  font-size: 12px;
+  text-align: center;
+  padding: 7px 10px !important;
+  white-space: nowrap;
+}
+.td-clinic-value {
+  font-size: 11px;
+  padding: 7px 8px !important;
+  word-break: break-all;
+  line-height: 1.4;
+}
+.td-clinic-value.red {
+  color: #cc0000;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.rx-presc-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-bottom: 2.5px solid #000;
+}
+.rx-presc-table th,
+.rx-presc-table td {
+  border: 1.5px solid #000;
+  padding: 0;
+}
+.rx-presc-table th:first-child,
+.rx-presc-table td:first-child { border-left: none; }
+.rx-presc-table th:last-child,
+.rx-presc-table td:last-child  { border-right: none; }
+.rx-presc-table thead tr th    { border-top: none; }
+.rx-presc-table tbody tr:last-child td { border-bottom: none; }
+
+.rx-presc-table thead th {
+  font-weight: 700;
+  font-size: 13px;
+  text-align: center;
+  letter-spacing: 0.3em;
+  padding: 10px 6px !important;
+  padding-right: calc(0.3em + 6px) !important;
+}
+.th-dose {
+  font-size: 11px !important;
+  letter-spacing: 0.05em !important;
+  padding: 10px 4px !important;
+  padding-right: 4px !important;
+  width: 52px;
+  line-height: 1.5;
+}
+
+.td-presc-name {
+  padding: 14px !important;
+  height: 180px;
+  vertical-align: top;
+}
+.td-presc-dose {
+  text-align: center;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 14px 4px !important;
+  vertical-align: top;
+  width: 52px;
+}
+.td-presc-usage {
+  padding: 14px !important;
+  font-size: 14px;
+  font-weight: 700;
+  vertical-align: top;
+  line-height: 2.2;
+}
+.rx-presc-item {
+  color: #cc0000;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.rx-period-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-bottom: 2.5px solid #000;
+}
+.rx-period-table td {
+  border: 1.5px solid #000;
+  padding: 9px 12px !important;
+  font-size: 13px;
+  vertical-align: middle;
+}
+.rx-period-table td:first-child { border-left: none; }
+.rx-period-table td:last-child  { border-right: none; }
+.rx-period-table tr td { border-top: none; border-bottom: none; }
+.td-period-label { font-weight: 700; white-space: nowrap; }
+.td-period-value { white-space: nowrap; }
+
+.rx-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  min-height: 120px;
+}
+.rx-footer img { width: 120px; height: auto; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   @media print — 8cm 감열지
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media print {
+  body * { visibility: hidden; }
+  #prescriptionArea,
+  #prescriptionArea * { visibility: visible; }
+
+  #prescriptionArea {
+    display: block !important;
+    position: fixed;
+    top: 0; left: 0;
+    width: 80mm !important;
+  }
+
+  .rx-title { font-size: 14px; padding: 12px 0 10px; letter-spacing: 1em; padding-right: 1em; }
+  .td-hanja, .td-label { font-size: 9px; padding: 6px !important; }
+  .td-value { font-size: 10px; padding: 6px 8px !important; }
+  .td-clinic-vert { font-size: 8px; width: 16px; }
+  .td-clinic-label { font-size: 8px; padding: 5px 6px !important; }
+  .td-clinic-value { font-size: 8px; padding: 5px 6px !important; }
+  .td-clinic-value.red { font-size: 9px; }
+  .rx-presc-table thead th { font-size: 9px; padding: 7px 4px !important; }
+  .th-dose { font-size: 8px !important; width: 34px; }
+  .td-presc-name { padding: 10px !important; height: 100px; }
+  .td-presc-dose { width: 34px; font-size: 11px; padding: 10px 2px !important; }
+  .td-presc-usage { font-size: 10px; padding: 10px 8px !important; line-height: 1.8; }
+  .rx-presc-item { font-size: 10px; margin-bottom: 4px; }
+  .rx-period-table td { font-size: 8px; padding: 6px 8px !important; }
+  .rx-footer { min-height: 70px; padding: 12px; }
+  .rx-footer img { width: 65px; }
+
+  .td-value, .rx-presc-item, .td-clinic-value.red {
+    color: #cc0000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+     
+
     </style>
   </head>
   <body>
@@ -662,7 +879,79 @@
       <!-- end right-panel -->
     </div>
     <!-- end consultation -->
+    <div id="prescriptionArea">
 
+  <div class="rx-title">처 방 전</div>
+
+  <table class="rx-info-table">
+    <tbody>
+      <tr>
+        <td class="td-hanja" rowspan="2">환<br/>자</td>
+        <td class="td-label">성&nbsp;&nbsp;명</td>
+        <td class="td-value" id="print-name"></td>
+        <td class="td-clinic-vert" rowspan="3">의<br/>료<br/>기<br/>관</td>
+        <td class="td-clinic-label">명&nbsp;칭</td>
+        <td class="td-clinic-value">M.A.S.S</td>
+      </tr>
+      <tr>
+        <td class="td-label">소속번호</td>
+        <td class="td-value" id="print-id"></td>
+        <td class="td-clinic-label">의사명</td>
+        <td class="td-clinic-value red" id="print-doctor"></td>
+      </tr>
+      <tr>
+        <td colspan="3" style="border:none;"></td>
+        <td class="td-clinic-label">주&nbsp;&nbsp;소</td>
+        <td class="td-clinic-value">https://c352011-cmd.github.io/Hospit-alien/</td>
+      </tr>
+    </tbody>
+  </table>
+  
+<!-- 처방전 -->
+  <table class="rx-presc-table">
+    <thead>
+      <tr>
+        <th>처 방 의 약 품 &nbsp; 명 칭</th>
+        <th class="th-dose">1회<br/>투약량</th>
+        <th>용 &nbsp; 법</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="td-presc-name">
+          <div class="rx-presc-item" id="print-presc1"></div>
+          <div class="rx-presc-item" id="print-presc2"></div>
+          <div class="rx-presc-item" id="print-presc3"></div>
+        </td>
+        <td class="td-presc-dose">1</td>
+        <td class="td-presc-usage">
+          하루 3회 식후 30분<br/>
+          &ldquo;<br/>
+          &ldquo;
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="rx-period-table">
+    <tbody>
+      <tr>
+        <td class="td-period-label">사용기간</td>
+        <td class="td-period-value">교부일로부터 (7)일간</td>
+        <td>사용기간 내에 약국에 제출하십시오.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="rx-footer">
+    <img src="logo.svg" alt="M.A.S.S"
+      onerror="this.style.display='none'" />
+  </div>
+
+</div>
+
+</div>
+  </body>
     <script>
       /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
            WEBCAM
@@ -835,14 +1124,23 @@
                 20,
                 () => {
                   // show label, input, and button together after all text is typed
+                  // document.getElementById("label2").style.display = "block";
+                  // document.getElementById("input2").style.display = "block";
+                  // document.getElementById("submitBtn2").style.display = "block";
+                  // document.getElementById("label2").classList.add("fade-in");
+                  // document.getElementById("input2").classList.add("fade-in");
+                  // document
+                  //   .getElementById("submitBtn2")
+                  //   .classList.add("fade-in");
+                  // Step 5: 처방 데이터를 localStorage에 저장
+                  // Step 5: 처방전 값 채우고 버튼 표시
                   document.getElementById("label2").style.display = "block";
-                  document.getElementById("input2").style.display = "block";
-                  document.getElementById("submitBtn2").style.display = "block";
-                  document.getElementById("label2").classList.add("fade-in");
-                  document.getElementById("input2").classList.add("fade-in");
-                  document
-                    .getElementById("submitBtn2")
-                    .classList.add("fade-in");
+        document.getElementById("input2").style.display = "block";
+        document.getElementById("submitBtn2").style.display = "block";
+        document.getElementById("label2").classList.add("fade-in");
+        document.getElementById("input2").classList.add("fade-in");
+        document.getElementById("submitBtn2").classList.add("fade-in");
+                  
                 },
               ),
           );
@@ -896,6 +1194,25 @@
             );
           });
         }
+      }
+      function generateId() {
+        const part1 = String(Math.floor(Math.random() * 900000) + 100000);
+        const part2 = String(Math.floor(Math.random() * 90) + 10);
+        return `${part1}-${part2}-E`;
+      }
+
+      function generateDoctorName() {
+        const consonants = "BCDFGHJKLMNPQRSTVWXYZ";
+        const vowels = "AEIOU";
+        const length = Math.floor(Math.random() * 5) + 3;
+        let name = "";
+        for (let i = 0; i < length; i++) {
+          name +=
+            i % 2 === 0
+              ? consonants[Math.floor(Math.random() * consonants.length)]
+              : vowels[Math.floor(Math.random() * vowels.length)];
+        }
+        return name;
       }
 
       /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -976,13 +1293,21 @@
                   25,
                   () => {
                     // Step 5: show the print button after everything is typed
-                    document.getElementById("printBtn").style.display =
-                      "inline-block";
-                    document.getElementById("homeBtn").style.display = "block";
-                    document
-                      .getElementById("printBtn")
-                      .classList.add("fade-in");
-                    document.getElementById("homeBtn").classList.add("fade-in");
+                    // Step 5: 처방전 값 채우기
+const patientName = localStorage.getItem("patientName") || "이름";
+document.getElementById("print-name").textContent = patientName;
+document.getElementById("print-id").textContent = generateId();
+document.getElementById("print-doctor").textContent = generateDoctorName();
+document.getElementById("print-presc1").textContent = enItems[0];
+document.getElementById("print-presc2").textContent = enItems[1];
+document.getElementById("print-presc3").textContent = enItems[2];
+
+// 버튼 표시
+document.getElementById("printBtn").style.display = "block";
+document.getElementById("printBtn").onclick = function() { window.print(); };
+document.getElementById("homeBtn").style.display = "block";
+document.getElementById("printBtn").classList.add("fade-in");
+document.getElementById("homeBtn").classList.add("fade-in");
                   },
                 );
               },
