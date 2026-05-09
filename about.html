@@ -142,7 +142,7 @@
       text-align: center;
       font-family: var(--font-mono);
       margin-top: 50px;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       margin-left: 20%;
       margin-right: 20%;
     }
@@ -211,13 +211,23 @@
 
 /* position each node at top, right, bottom, left */
 /* node 0 — top */
-#node0 { top: 0;   left: 50%; transform: translateX(-50%); }
-/* node 1 — right */
-#node1 { top: 50%; right: 0;  transform: translateY(-50%); }
-/* node 2 — bottom */
-#node2 { bottom: 0; left: 50%; transform: translateX(-50%); }
-/* node 3 — left */
-#node3 { top: 50%; left: 0;  transform: translateY(-50%); }
+#node0 {
+  top:  calc(50% + 80px * sin(-90deg) - 0px);
+  left: calc(50% + 80px * cos(-90deg) - 20px);
+}
+
+/* node1 — 오른쪽 아래 (30도 = 4시 방향) */
+#node1 {
+  top:  calc(50% + 80px * sin(30deg) - 30px);
+  left: calc(50% + 80px * cos(30deg) - 40px);
+}
+
+/* node2 — 왼쪽 아래 (150도 = 8시 방향) */
+#node2 {
+  top:  calc(50% + 80px * sin(150deg) - 30px);
+  left: calc(50% + 80px * cos(150deg) - 0px);
+}
+
 
 /* the connecting ring lines between nodes */
 .orbit-ring::before {
@@ -308,9 +318,7 @@
     <div class="orbit-node" id="node2" onclick="selectNode(2)">
       <div class="orbit-dot"></div>
     </div>
-    <div class="orbit-node" id="node3" onclick="selectNode(3)">
-      <div class="orbit-dot"></div>
-    </div>
+   
 
   </div>
 
@@ -324,24 +332,35 @@
   {
     title: 'History',
     info: `
-    <p>The first contact: the 20th century<br /><br />
-        In the mid-1900s, in England on Earth, within the Solar System.
+    <p>The first contact: the 20th century
+        <span style="font-size: 1.6rem; color:#888888;">In the mid-1900s, in England on Earth, within the Solar System.</span>
         <br /><br />
         It was the first attempt by a species from K2-18b to contact the species of Earth.
         Earth named this contact “crop circles.”
         </p>
+         <p><span style="font-size: 1rem; color:#888888;display: block; line-height: 1.6;">
+            K2-18b로부터 지구에 접촉을 시도한 것이 첫 번째 접촉이었다. <br />
+            지구 생명체들은 그 접촉을 "미스터리 서클"이라 명명했다.<br /></span></p>
 
       <img src="info1.svg" style="width:100%; margin: 12px 0;" />
 
       <p><br /><br />The first interaction<br /><br />
-        After the first contact, other crop circles — not made by the K2-18b species — were observed as “the first answer from humans.”
+        After the first contact, other crop circles<span style="font-size: 1rem; color:#888888;"> — not made by the K2-18b species — </span><br />
+        were observed as “the first answer from humans.”
         </p>
+        <p><span style="font-size: 1rem; color:#888888;display: block; line-height: 1.6;">
+           첫 번째 접촉 이후, 다른 미스터리 서클들 -K2-18b로부터 만들어진 것이 아닌- <br />
+            이 발견되었다. 이는 인간으로부터의 첫 번째 답장을 의미한다.<br /></span></p>
 
       <img src="info2.svg" style="width:100%; margin: 12px 0;" />
+      <img src="info3.svg" style="width:100%; margin: 12px 0;" />
 
-      <p>Since the first contact was successful, attempts at direct contact followed, including 
+      <p><br /><br />Since the first contact was successful, attempts at direct contact followed, including 
         <a href="https://en.wikipedia.org/wiki/Barney_and_Betty_Hill_incident">the meeting with Barney Hill and Betty Hill in 1961.<a></p>
-      <img src="info2.svg" style="width:100%; margin: 12px 0;" /> `
+            <p><span style="font-size: 1rem; color:#888888;display: block; line-height: 1.6;">
+            첫 접촉이 성공적이었으므로, 직접 접촉을 위한 시도가 이루어졌다: <br />
+            196년, 힐 부부와의 만남<br /></span></p>
+      <img src="info4.svg" style="width:100%; margin: 12px 0;"/> <br /><br /><br /><br /> `
   },
   {
     title: 'Pan-species care',
@@ -349,12 +368,81 @@
   },
   {
     title: 'Our doctors',
-    info: 'Our medical staff consists of certified practitioners from Earth, Mars, and K2-18b civilizations.'
-  },
-  {
-    title: 'Mission',
-    info: 'To ensure no living being is denied medical treatment regardless of their planetary origin or biology.'
+    info: `<p> Dr. Banana</p>
+    <img src="dr2.png" style="width:100%;" />
+        <p><span style="font-size: 1.2rem; display: block; line-height: 1.6;">
+            Specialist in Neural Memory Reconstruction from K2-18b.
+            Dr. Bananan has conducted over 3,000 interspecies cognitive
+            surgeries and is known for developing the “Dream Bridge Protocol,”
+            allowing humans and extraterrestrials to communicate through
+            synchronized neural waves. After arriving on Earth in 1961,
+            he began researching human emotional structures and cross-species empathy.</span></p>
+
+            <p><span style="font-size: 1rem; color:#888888;display: block; line-height: 1.6;">
+                <br />K2-18b 출신의 신경 기억 재건 전문의.
+                박사는 3,000건 이상의 종간 인지 수술을 진행했으며,
+                인간과 외계 생명체가 동기화된 신경파를 통해 소통할 수 있도록 하는
+                “드림 브리지 프로토콜” 개발자로 알려져 있다.
+                1961년 지구 도착 이후 인간의 감정 구조와 종간 공감 능력을 연구해왔다.
+                </span></p>
+
+        <p><br /><br />Dr. E.T</p>
+        <img src="dr1.png" style="width:100%;" />
+         <p><span style="font-size: 1.2rem; display: block; line-height: 1.6;">
+            Expert in Cellular Regeneration and Atmospheric Adaptation.
+            Dr. E.T specializes in adapting extraterrestrial
+            biology to Earth environments.
+            She pioneered oxygen-tolerant regeneration therapy for
+            K2-18b visitors and has dedicated her research to extending
+            the lifespan of both humans and alien species through hybrid
+            cellular medicine.</span><p>
+        <p><span style="font-size: 1rem; color:#888888;display: block; line-height: 1.6;">
+            <br />세포 재생 및 대기 적응 분야의 전문가.
+            E.T 박사는 외계 생명체의 생체 구조를 지구 환경에 적응시키는
+            연구를 전문으로 한다. 그녀는 K2-18b 방문자들을 위한 산소 적응
+            재생 치료법을 개척했으며, 인간과 외계 종족 모두의 수명을 연장하기
+            위한 혼합 세포 의학 연구에 헌신하고 있다.</span></p>
+        
+        <p><br /><br />Dr. Hamster</p>
+        <img src="dr3.png" style="width:100%;" />
+        <p><span style="font-size: 1.2rem; display: block; line-height: 1.6;">
+            Founder of the Interplanetary Trauma Center.
+            Dr. Hamster is recognized for treating 
+            psychological trauma caused by long-distance
+            space migration and failed first-contact experiences.
+            His studies focus on memory fragmentation,
+            isolation anxiety, and the emotional compatibility
+            between Earth humans and extraterrestrial civilizations.</span></p>
+        <p><span style="font-size: 1rem; color:#888888;display: block; line-height: 1.6;">
+            <br />행성 간 외상 치료 센터 설립자.
+            햄스터 박사는 장거리 우주 이주와 실패한 최초 접촉 경험으로 인한
+            정신적 외상을 치료한 공로로 알려져 있다. 그의 연구는 기억 파편화,
+            고립 불안, 그리고 지구인과 외계 문명 간의 감정적 호환성에 초점을 맞추고 있다.</span></p>
+
+        <p><br /><br />Dr. Sebastian</p>
+        <img src="dr4.png" style="width:100%;" />
+        <p><span style="font-size: 1.2rem; display: block; line-height: 1.6;">
+            Director of Interspecies Genetic Medicine.
+            Dr. Sebastian specializes in the biological differences
+            between humans and K2-18b lifeforms. He is known for
+            developing adaptive genetic treatments that allow
+            extraterrestrial species to survive under Earth conditions.
+            His current research explores how human DNA responds to
+            prolonged exposure to cosmic radiation and non-terrestrial
+            environments.</span></p>
+        <p><span style="font-size: 1rem; color:#888888;display: block; line-height: 1.6;">
+            종간 유전 의학 연구 책임자.
+            세바스찬 박사는 인간과 K2-18b 생명체 사이의 생물학적 차이를 연구하는
+            전문가이다. 그는 외계 종족이 지구 환경에서 생존할 수 있도록 하는 적응형
+            유전자 치료 기술 개발로 알려져 있다. 현재는 우주 방사선과 비지구적 환경에
+            장기간 노출되었을 때 인간 DNA가 어떻게 반응하는지를 연구하고 있다.
+            <br /><br /><br /><br /></span></p>
+
+
+
+        `
   }
+  
 ];
 
 /* tracks which node is currently on top (index 0 = top position) */
@@ -365,33 +453,19 @@ function selectNode(index) {
   const ring = document.getElementById('orbitRing');
   const info = document.getElementById('orbitInfo');
 
-  /* remove selected class from all nodes */
   document.querySelectorAll('.orbit-node').forEach(n => n.classList.remove('selected'));
-
-  /* add selected class to clicked node */
   document.getElementById('node' + index).classList.add('selected');
 
-  /*
-    Calculate how much to rotate so the clicked node
-    moves to the top position.
-    Each node is 90deg apart (360 / 4 = 90).
-    node0=0deg, node1=90deg, node2=180deg, node3=270deg
-  */
-  const nodeAngle = index * 90;
-  currentRotation = -nodeAngle; /* negative rotates it to top */
+  // 3개니까 120도씩 간격
+  const nodeAngle = index * 120;   /* ← 90 → 120 으로 변경 */
+  currentRotation = -nodeAngle;
 
-  /* apply rotation to the whole ring */
   ring.style.transform = `rotate(${currentRotation}deg)`;
 
-  /*
-    Counter-rotate each dot so the dots themselves
-    stay upright while the ring spins.
-  */
-  document.querySelectorAll('.orbit-dot').forEach((dot, i) => {
+  document.querySelectorAll('.orbit-dot').forEach(dot => {
     dot.style.transform = `rotate(${-currentRotation}deg)`;
   });
 
-  /* show the info for the clicked node */
   info.innerHTML = `
     <strong style="font-size:1.1rem; display:block; margin-bottom:8px;">
       ${nodeData[index].title}
