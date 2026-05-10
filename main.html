@@ -624,6 +624,13 @@ height: 34px;
           content: "";
         }
       }
+    .morse {
+  font-family: 'Courier New', monospace;
+  font-size: inherit;
+  letter-spacing: 0.15em;
+  line-height: 2;
+  word-break: break-all;
+}
     </style>
   </head>
   <body>
@@ -694,7 +701,7 @@ height: 34px;
         </button>
 
         <!-- Button 2: K2-18b-oriented species (amorphous blob form) -->
-        <button class="species-btn" onclick="window.location.href = 'mars.html'">
+        <button class="species-btn" onclick="selectSpecies('k2')">
           <img src="k2.svg" alt="k2" />
           <span class="species-label">K2-18b-oriented species</span>
         </button>
@@ -747,7 +754,7 @@ height: 34px;
      ════════════════════════════════════════════════════════ -->
     <section class="screen" id="screen3">
       <div class="screen-header">
-        <h1>Click your chromosomes</h1>
+        <h1 id="screen3-title">Click your chromosomes</h1>
         <h3 id="screen3-sub">당신의 염색체를 순서대로 클릭하세요</h3>
       </div>
 
@@ -808,8 +815,8 @@ height: 34px;
      ════════════════════════════════════════════════════════ -->
     <section class="screen" id="screen4">
       <div class="screen-header">
-        <h1>Optional information</h1>
-        <h3 id="screen3-sub">기타 정보 (선택사항)</h3>
+        <h1 id="screen4-title">Optional information</h1>
+        <h3 id="screen4-sub">기타 정보 (선택사항)</h3>
       </div>
 
       <div class="opt-row">
@@ -911,7 +918,7 @@ height: 34px;
      ════════════════════════════════════════════════════════ -->
     <section class="screen" id="screenW">
       <div class="matching-text">
-        <h1>Matching your doctor<span class="dots"></span></h1>
+        <h1 id="screenW-title">Matching your doctor<span class="dots"></span></h1>
         <h3 id="screenW-sub">당신의 의사를 찾고 있습니다<span class="dots"></span></h3>
       </div>
 
@@ -1011,22 +1018,55 @@ const marsTexts = {
 function selectSpecies(species) {
   localStorage.setItem('selectedSpecies', species);
 
-  /* Mars 선택 시 이후 화면 텍스트를 윙딩스로 교체 */
   if (species === 'mars') {
-    /* screen3 한국어 자막 */
+    /* screen3 */
+    const s3t = document.getElementById('screen3-title');
+    if (s3t) s3t.innerHTML =
+      `<span class="wingdings">${toWingdings("click your chromosomes")}</span>`;
     const s3 = document.getElementById('screen3-sub');
     if (s3) s3.innerHTML =
-      `<span style="font-family:'Wingdings'">${toWingdings(marsTexts.screen3Sub)}</span>`;
+      `<span class="wingdings">${toWingdings("dangsin ui yeomssaekchereul sunseodaero keullikhaseyo")}</span>`;
 
-    /* screen4 한국어 자막 */
+    /* screen4 */
+    const s4t = document.getElementById('screen4-title');
+    if (s4t) s4t.innerHTML =
+      `<span class="wingdings">${toWingdings("optional information")}</span>`;
     const s4 = document.getElementById('screen4-sub');
     if (s4) s4.innerHTML =
-      `<span style="font-family:'Wingdings'">${toWingdings(marsTexts.screen4Sub)}</span>`;
+      `<span class="wingdings">${toWingdings("gita jeongbo seontaeksahang")}</span>`;
 
-    /* screenW 한국어 자막 */
+    /* screenW */
+    const swt = document.getElementById('screenW-title');
+    if (swt) swt.innerHTML =
+      `<span class="wingdings">${toWingdings("matching your doctor")}</span>`;
     const sw = document.getElementById('screenW-sub');
     if (sw) sw.innerHTML =
-      `<span style="font-family:'Wingdings'">${toWingdings("dangsin ui uisareul chaj go issseumnida")}</span>`;
+      `<span class="wingdings">${toWingdings("dangsin ui uisareul chaj go issseumnida")}</span>`;
+
+  } else if (species === 'k2') {
+    /* screen3 */
+    const s3t = document.getElementById('screen3-title');
+    if (s3t) s3t.innerHTML =
+      `<span class="morse">${toMorse("click your chromosomes")}</span>`;
+    const s3 = document.getElementById('screen3-sub');
+    if (s3) s3.innerHTML =
+      `<span class="morse">${toMorse("dangsin ui yeomssaekchereul sunseodaero keullikhaseyo")}</span>`;
+
+    /* screen4 */
+    const s4t = document.getElementById('screen4-title');
+    if (s4t) s4t.innerHTML =
+      `<span class="morse">${toMorse("optional information")}</span>`;
+    const s4 = document.getElementById('screen4-sub');
+    if (s4) s4.innerHTML =
+      `<span class="morse">${toMorse("gita jeongbo seontaeksahang")}</span>`;
+
+    /* screenW */
+    const swt = document.getElementById('screenW-title');
+    if (swt) swt.innerHTML =
+      `<span class="morse">${toMorse("matching your doctor")}</span>`;
+    const sw = document.getElementById('screenW-sub');
+    if (sw) sw.innerHTML =
+      `<span class="morse">${toMorse("dangsin ui uisareul chaj go issseumnida")}</span>`;
   }
 
   goToScreen('screen3');
@@ -1242,6 +1282,28 @@ function goToScreen(id) {
       window.location.href = "conversation.html";
     }, 2500);
   }
+}
+
+/* ── 모스부호 변환 맵 ── */
+const morseMap = {
+  'a':'·−',   'b':'−···', 'c':'−·−·', 'd':'−··',
+  'e':'·',    'f':'··−·', 'g':'−−·',  'h':'····',
+  'i':'··',   'j':'·−−−', 'k':'−·−',  'l':'·−··',
+  'm':'−−',   'n':'−·',   'o':'−−−',  'p':'·−−·',
+  'q':'−−·−', 'r':'·−·',  's':'···',  't':'−',
+  'u':'··−',  'v':'···−', 'w':'·−−',  'x':'−··−',
+  'y':'−·−−', 'z':'−−··',
+  '0':'−−−−−','1':'·−−−−','2':'··−−−',
+  '3':'···−−','4':'····−','5':'·····',
+  '6':'−····','7':'−−···','8':'−−−··','9':'−−−−·',
+  ' ':'   ', '.':'·−·−·−', ',':'−−··−−',
+  '?':'··−−··','!':'−·−·−−','\n':'\n'
+};
+
+function toMorse(text) {
+  return text.toLowerCase().split('').map(char =>
+    morseMap[char] !== undefined ? morseMap[char] : char
+  ).join(' ');
 }
     </script>
   </body>
