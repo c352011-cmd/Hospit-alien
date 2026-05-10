@@ -695,7 +695,7 @@ height: 34px;
   -->
       <div class="species-row">
         <!-- Button 1: Earth-oriented species (upright humanoid) -->
-        <button class="species-btn" onclick="goToScreen('screen3')">
+        <button class="species-btn" onclick="selectSpecies('earth')">
           <img src="earth.svg" alt="earth" />
           <span class="species-label">Earth-oriented species</span>
         </button>
@@ -1017,8 +1017,25 @@ const marsTexts = {
 
 function selectSpecies(species) {
   localStorage.setItem('selectedSpecies', species);
+  if (species === 'earth') {
+    /* 텍스트를 원래대로 복구 */
+    const s3t = document.getElementById('screen3-title');
+    if (s3t) s3t.textContent = "Click your chromosomes";
+    const s3 = document.getElementById('screen3-sub');
+    if (s3) s3.textContent = "당신의 염색체를 순서대로 클릭하세요";
 
-  if (species === 'mars') {
+    const s4t = document.getElementById('screen4-title');
+    if (s4t) s4t.textContent = "Optional information";
+    const s4 = document.getElementById('screen4-sub');
+    if (s4) s4.textContent = "기타 정보 (선택사항)";
+
+    const swt = document.getElementById('screenW-title');
+    if (swt) swt.innerHTML = `Matching your doctor<span class="dots"></span>`;
+    const sw = document.getElementById('screenW-sub');
+    if (sw) sw.innerHTML = `당신의 의사를 찾고 있습니다<span class="dots"></span>`;
+
+  }
+  else if (species === 'mars') {
     /* screen3 */
     const s3t = document.getElementById('screen3-title');
     if (s3t) s3t.innerHTML =
