@@ -133,6 +133,12 @@ padding: 18px;
         }
       }
 
+      .wingdings {
+  font-family: 'Wingdings', 'Wingdings 2', 'Symbol', sans-serif;
+  font-size: inherit;
+  letter-spacing: 0.05em;
+}
+
 
       .about{
         width: 100%;
@@ -330,6 +336,90 @@ padding: 18px;
         color: var(--black);
         gap: 28.61px;
       }
+
+      /* 추천 박스 */
+.recommend-box {
+  position: relative;
+  width: 1110px;
+height: 440px;
+  margin-top: 32px;
+  padding: 40px 48px;
+ border-radius: 55px 55px 0 0;
+background: rgba(255, 255, 255, 0.95);
+box-shadow: 0 0 115.7px -22px #3F0;
+
+  text-align: center;
+
+  transform: translateY(0);
+  transition: transform 0.6s cubic-bezier(0.32, 0, 0.67, 0);
+  
+}
+
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+   /* 반투명 검정 */
+  display: flex;
+  align-items: flex-end;            /* 박스를 하단에 배치 */
+  justify-content: center;
+  z-index: 999;
+  opacity: 1;
+  transition: opacity 0.4s ease 0.1s; 
+  padding-bottom: 0;
+}
+
+/* 오버레이 숨김 상태 */
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;             /* 숨겨진 상태에서 클릭 통과 */
+}
+
+/* 박스가 사라질 때 */
+.overlay.hidden .recommend-box {
+  transform: translateY(110%);
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 삼각형 닫기 버튼 */
+.recommend-close {
+  display: block;
+  width: 80px;
+height: 34px;
+  margin: 0 auto 20px;
+  background: none;
+  border: 3px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--black);
+  transition: transform 0.2s ease;
+}
+
+.recommend-close:hover {
+  transform: translateY(4px); /* 호버시 아래로 살짝 이동 */
+}
+
+/* 추천 텍스트 */
+.recommend-text {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.recommend-sub {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--gray-text);
+  line-height: 1.6;
+}
 
       /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                      ── SCREEN 3 ── CHROMOSOME SELECTION
@@ -581,7 +671,7 @@ padding: 18px;
     <section class="screen" id="screen2">
       <div class="screen-header">
         <h1>Choose your species and language</h1>
-        <h3>당신의 종족과 언어를 고르세요</h3>
+        <h3 >당신의 종족과 언어를 고르세요</h3>
       </div>
 
       <!--
@@ -604,11 +694,34 @@ padding: 18px;
 
         <!-- Button 3: Mars-oriented species (angular/architectural form) -->
         <button class="species-btn"  
-        onclick="window.location.href = 'mars.html'">
+        onclick="selectSpecies('mars')">
           <img src="mars.svg" alt="mars" />
           <span class="species-label">Mars-oriented species</span>
+          
         
         </button>
+
+</div>
+<div class="overlay" id="recommendOverlay">
+  <div class="recommend-box" id="recommendBox">
+
+    <button class="recommend-close" onclick="closeRecommend()">▼</button>
+
+    <p class="recommend-text">
+      Your location is estimated to be Earth.<br/>
+      For smoother medical treatment,<br/>
+      we recommend selecting "Earth-oriented"
+    </p>
+
+    <p class="recommend-sub">
+      당신의 위치는 지구로 감지됩니다.<br/>
+      원활한 진료를 위해 "Earth-oriented"를<br/>
+      선택하시는 것을 권장드립니다.
+    </p>
+
+  </div>
+</div>
+
       </div>
 
       <!-- Bottom logo mark -->
@@ -628,7 +741,7 @@ padding: 18px;
     <section class="screen" id="screen3">
       <div class="screen-header">
         <h1>Click your chromosomes</h1>
-        <h3>당신의 염색체를 순서대로 클릭하세요</h3>
+        <h3 id="screen3-sub">당신의 염색체를 순서대로 클릭하세요</h3>
       </div>
 
       <!--
@@ -689,7 +802,7 @@ padding: 18px;
     <section class="screen" id="screen4">
       <div class="screen-header">
         <h1>Optional information</h1>
-        <h3>기타 정보 (선택사항)</h3>
+        <h3 id="screen3-sub">기타 정보 (선택사항)</h3>
       </div>
 
       <div class="opt-row">
@@ -792,7 +905,7 @@ padding: 18px;
     <section class="screen" id="screenW">
       <div class="matching-text">
         <h1>Matching your doctor<span class="dots"></span></h1>
-        <h3>당신의 의사를 찾고 있습니다<span class="dots"></span></h3>
+        <h3 id="screenW-sub">당신의 의사를 찾고 있습니다<span class="dots"></span></h3>
       </div>
 
        <div class="logo-mark">
@@ -855,22 +968,7 @@ padding: 18px;
      by adding the .active class.
      Special case: "screenW" auto-advances after 2.5 s.
   ─────────────────────────────────────────────────────── */
-      function goToScreen(id) {
-  document
-    .querySelectorAll(".screen")
-    .forEach((s) => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-
-  if (id === "screenW") {
-    setTimeout(() => {
-        // ← 이름을 localStorage에 저장
-    const name = document.getElementById("nameInput").value.trim();
-    if (name) localStorage.setItem("patientName", name);
-      window.location.href = "conversation.html"; // ← opens conversation.html after 2.5s
-    }, 2500);
-  }
-}
-
+     
       /* ─── CHROMOSOME DISPLAY ────────────────────────────────
      addChromosome(type)
      Called when a chromosome button (X / Y / I / T) is clicked.
@@ -878,6 +976,55 @@ padding: 18px;
      to the #chromDisplay box. Limits total count to 8.
   ─────────────────────────────────────────────────────── */
   
+  /* 윙딩스 변환 맵 */
+const wingdingsMap = {
+  'a':'✌','b':'✌','c':'❄','d':'◆','e':'■',
+  'f':'□','g':'▪','h':'▫','i':'☞','j':'☜',
+  'k':'☝','l':'☟','m':'✋','n':'☺','o':'☻',
+  'p':'♥','q':'♦','r':'♣','s':'♠','t':'•',
+  'u':'◦','v':'‣','w':'✓','x':'✗','y':'✦',
+  'z':'✧',' ':' ','.':'.','!':'!','?':'?',
+  ',':',','\n':'\n'
+};
+
+function toWingdings(text) {
+  return text.toLowerCase().split('').map(char =>
+    wingdingsMap[char] || char
+  ).join('');
+}
+
+/* 종족별 텍스트 */
+const marsTexts = {
+  screen3Sub: "dangsin ui yeomssaekchereul sunseodaero keullihghaseo",
+  screen4Sub: "gita jeongbo seontaeksahang",
+  chromLabel: "X, Y, I, T reul keulikhaseyo",
+  nextBtn: "next",
+};
+
+function selectSpecies(species) {
+  localStorage.setItem('selectedSpecies', species);
+
+  /* Mars 선택 시 이후 화면 텍스트를 윙딩스로 교체 */
+  if (species === 'mars') {
+    /* screen3 한국어 자막 */
+    const s3 = document.getElementById('screen3-sub');
+    if (s3) s3.innerHTML =
+      `<span style="font-family:'Wingdings'">${toWingdings(marsTexts.screen3Sub)}</span>`;
+
+    /* screen4 한국어 자막 */
+    const s4 = document.getElementById('screen4-sub');
+    if (s4) s4.innerHTML =
+      `<span style="font-family:'Wingdings'">${toWingdings(marsTexts.screen4Sub)}</span>`;
+
+    /* screenW 한국어 자막 */
+    const sw = document.getElementById('screenW-sub');
+    if (sw) sw.innerHTML =
+      `<span style="font-family:'Wingdings'">${toWingdings("dangsin ui uisareul chaj go issseumnida")}</span>`;
+  }
+
+  goToScreen('screen3');
+}
+
       function addChromosome(type) {
         const display = document.getElementById("chromDisplay");
 
@@ -1033,6 +1180,62 @@ document.addEventListener('keydown', function(event) {
         // update the img src to show the new image
         document.getElementById("disp-height").src = heightImages[heightIndex];
       }
+
+      /* 삼각형 버튼 클릭 시 박스 닫기 */
+function closeRecommend() {
+  const overlay = document.getElementById('recommendOverlay');
+  /* box가 아닌 overlay에 hidden 클래스를 추가해야 함 */
+  overlay.classList.add('hidden');
+}
+
+/* 위치 기반으로 추천 종족 자동 감지 */
+function detectLocation() {
+  const box = document.getElementById('recommendBox');
+  const text = document.getElementById('recommendText');
+
+  if (!navigator.geolocation) return;
+
+  navigator.geolocation.getCurrentPosition((pos) => {
+    const lat = pos.coords.latitude;
+
+    /* 위도 기준으로 행성 추정 (예시 로직) */
+    let planet = 'Earth';
+    let planetKo = '지구';
+
+    /* 실제로는 모두 지구이므로 항상 Earth 추천 */
+    document.querySelector('.recommend-text').innerHTML = `
+      Your location is estimated to be ${planet}.<br/>
+      For smoother medical treatment,<br/>
+      we recommend selecting "${planet}-oriented"
+    `;
+    document.querySelector('.recommend-sub').innerHTML = `
+      당신의 위치는 ${planetKo}로 감지됩니다.<br/>
+      원활한 진료를 위해 "${planet}-oriented"를<br/>
+      선택하시는 것을 권장드립니다.
+    `;
+  });
+}
+
+/* screen2가 열릴 때 박스 보여주기 */
+/* 기존 goToScreen 함수 안에 추가 */
+function goToScreen(id) {
+  document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  if (id === 'screen2') {
+    const overlay = document.getElementById('recommendOverlay');
+    overlay.classList.remove('hidden');  /* 다시 보이게 */
+    detectLocation();
+  }
+
+  if (id === "screenW") {
+    const name = document.getElementById("nameInput").value.trim();
+    if (name) localStorage.setItem("patientName", name);
+    setTimeout(() => {
+      window.location.href = "conversation.html";
+    }, 2500);
+  }
+}
     </script>
   </body>
 </html>

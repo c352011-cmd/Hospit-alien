@@ -12,62 +12,69 @@
     />
 
     <style>
-                              /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-                                 DESIGN TOKENS
-                              ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-                              :root {
-                                --black: #000000;
-                                --white: #ffffff;
-                                --green: #00ff41; /* neon green — brand accent */
-                                --gray-light: #f2f2f2;
-                                --gray-mid: #cccccc;
-                                --gray-text: #888888;
-                                --font-head: "Cossette Texte";
-                                --font-mono: "Cossette Texte";
-                                --radius: 999px; /* pill-shaped buttons */
-                                --transition: 0.25s ease;
-                              }
-                              *,
-                              *::before,
-                              *::after {
-                                box-sizing: border-box;
-                                margin: 0;
-                                padding: 0;
-                              }
+   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DESIGN TOKENS
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    :root {
+            --black: #000000;
+            --white: #ffffff;
+            --green: #00ff41; /* neon green — brand accent */
+            --gray-light: #f2f2f2;
+            --gray-mid: #cccccc;
+            --gray-text: #888888;
+            --font-head: "Cossette Texte";
+            --font-mono: "Cossette Texte";
+            --radius: 999px; /* pill-shaped buttons */
+            --transition: 0.25s ease;
+           }
+    *,
+    *::before,
+   *::after {
+             box-sizing: border-box;
+             margin: 0;
+             padding: 0;
+            }
 
-                              html,
-                              body {
-                                width: 100%;
-                                height: 100%;
-                                background: var(--white);
-                                font-family: var(--font-head);
-                                overflow: hidden; /* full viewport, no scroll */
-                              }
-
-
-
-                              /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-                                 MAIN LAYOUT — two columns side by side
-                                 Left: alien doctor video feed
-                                 Right: conversation panel
-                              ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-                              .consultation {
-                                display: flex;
-                                width: 100vw;
-                                height: 100vh;
-                              }
+    html,
+    body {
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            font-family: var(--font-head);
+            overflow: hidden; /* full viewport, no scroll */
+          }
 
 
 
-                              /* ── LEFT COLUMN ── alien image fills the left half */
-                              .left-panel {
-                                position: relative; /* for absolute children (camera box) */
-                                width: 50%;
-                                height: 100%;
-                                flex-shrink: 0;
-                                overflow: hidden;
-                                background: var(--black);
-                              }
+  /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MAIN LAYOUT — two columns side by side
+   Left: alien doctor video feed
+   Right: conversation panel
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+  .wingdings {
+  font-family: 'Wingdings', 'Wingdings 2', 'Symbol', sans-serif;
+  font-size: inherit;
+  letter-spacing: 0.05em;
+}
+
+  .consultation {
+                  display: flex;
+                  width: 100vw;
+                 height: 100vh;
+                }
+
+
+
+   /* ── LEFT COLUMN ── alien image fills the left half */
+  .left-panel {
+                position: relative; /* for absolute children (camera box) */
+                width: 50%;
+                height: 100%;
+                flex-shrink: 0;
+                overflow: visible;
+                background: var(--black);
+                }
 
                               /*
                                 The alien doctor image.
@@ -80,6 +87,8 @@
                                 object-fit: cover;
                                 object-position: center top;
                                 display: block;
+                                overflow: hidden;
+                                clip-path: inset(0);
                               }
 
                               /*
@@ -88,7 +97,7 @@
                                 position: absolute places it over the alien image.
                               */
                               .camera-box {
-                                position: absolute;
+                                position: fixed;
                                 bottom: 24px;
                                 left: 24px;
                                 width: 160px;
@@ -98,7 +107,27 @@
                                 overflow: hidden;
                                 /* subtle shadow so it stands out on dark background */
                                 box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+                                min-width: 180px;     /* 너무 작아지지 않게 최소 크기 */
+                              min-height: 250px;
+
+                                cursor: grab;                    /* 드래그 가능함을 표시 */
+                                
+                                z-index: 999;                    /* 브라우저 기본 크기 조절 핸들 추가 */
                               }
+                              .resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: se-resize;       /* 대각선 화살표 커서 */
+  background: rgba(255,255,255,0.4);
+  border-radius: 0 0 12px 0;
+}
+
+                              .camera-box:active {
+  cursor: grabbing;                /* 드래그 중일 때 커서 모양 */
+}
 
                               /*
                                 The actual <video> element that shows webcam.
@@ -108,6 +137,8 @@
                                 width: 100%;
                                 height: 100%;
                                 object-fit: cover;
+                                
+                                transition: border-color 0.2s ease;
                                 transform: scaleX(-1); /* mirror effect */
                               }
 
@@ -124,6 +155,49 @@
                                 text-align: center;
                                 padding: 8px;
                               }
+
+                              .resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  cursor: se-resize;
+  border-radius: 0 0 12px 0;
+  
+  /* 격자 점 패턴으로 핸들임을 표시 */
+  background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1.5px, transparent 1.5px);
+  background-size: 5px 5px;
+  background-position: bottom right;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.cam-tooltip {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 6px;
+  pointer-events: none;   /* 클릭이 뒤로 통과 */
+  opacity: 1;
+  transition: opacity 1s ease;
+  line-height: 1.6;
+}
+
+.cam-tooltip.hidden {
+  opacity: 0;             /* 사라질 때 fade out */
+}
+
+.resize-handle:hover {
+  opacity: 1;              /* 호버시 더 밝아짐 */
+}
 
                               /* ── RIGHT COLUMN ── conversation text + input */
                               /* .right-panel {
@@ -698,14 +772,7 @@
       The JS function startCamera() tries to access the webcam
       and places the video feed inside this box.
     -->
-        <div class="camera-box" id="cameraBox">
-          <!-- Video element — filled by JS -->
-          <video id="camVideo" autoplay muted playsinline></video>
-          <!-- Shown if camera permission is denied -->
-          <div class="camera-fallback" id="camFallback" style="display: none">
-            camera<br />unavailable
-          </div>
-        </div>
+        
       </div>
 
       <!-- ════════════════════════════════════════
@@ -761,6 +828,8 @@
             home
           </button>
         </div>
+        <!-- consultation 밖으로 꺼낸 camera-box -->
+
 
         <!-- ── CONVERSATION 2 ─────────────────────
          Question 2 + keyword input + submit
@@ -906,7 +975,7 @@
       </tr>
     </tbody>
   </table>
-  
+
 <!-- 처방전 -->
   <table class="rx-presc-table">
     <thead>
@@ -951,8 +1020,43 @@
 </div>
 
 </div>
+<div class="camera-box" id="cameraBox">
+  <video id="camVideo" autoplay muted playsinline></video>
+  <div class="camera-fallback" id="camFallback" style="display:none;">
+    camera<br/>unavailable
+  </div>
+  <div class="resize-handle" id="resizeHandle"></div>
+  <div class="cam-tooltip" id="camTooltip">
+    drag to move<br/>↘ to resize
+  </div>
+</div>
+</div>
   </body>
     <script>
+      /* ── 윙딩스 변환 맵 ──────────────────────────────
+   알파벳 → 윙딩스 기호 매핑
+   Mars 종족 선택 시 한국어 자막에 적용
+─────────────────────────────────────────────── */
+const wingdingsMap = {
+  'a':'✌','b':'✌','c':'❄','d':'◆','e':'■',
+  'f':'□','g':'▪','h':'▫','i':'☞','j':'☜',
+  'k':'☝','l':'☟','m':'✋','n':'☺','o':'☻',
+  'p':'♥','q':'♦','r':'♣','s':'♠','t':'•',
+  'u':'◦','v':'‣','w':'✓','x':'✗','y':'✦',
+  'z':'✧',' ':' ','.':'.','!':'!','?':'?',
+  ',':',','\n':'\n'
+};
+
+/* 텍스트를 윙딩스로 변환 */
+function toWingdings(text) {
+  return text.toLowerCase().split('').map(char =>
+    wingdingsMap[char] || char
+  ).join('');
+}
+
+/* 현재 선택된 종족 */
+const selectedSpecies = localStorage.getItem('selectedSpecies') || 'earth';
+const isMars = selectedSpecies === 'mars';
       /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
            WEBCAM
            startCamera() asks browser permission for the
@@ -1006,6 +1110,98 @@
         }
         tick(); // start
       }
+
+      /* ── 웹캠 박스 드래그 이동 ────────────────────────
+   마우스로 camera-box를 잡고 드래그하면
+   화면 안에서 자유롭게 이동할 수 있어요.
+─────────────────────────────────────────────── */
+function initDraggable() {
+  const box    = document.getElementById('cameraBox');
+  const handle = document.getElementById('resizeHandle');
+  /* initDraggable() 함수 안에 추가 */
+const tooltip = document.getElementById('camTooltip');
+
+/* 3초 후 툴팁 fade out */
+setTimeout(() => {
+  tooltip.classList.add('hidden');
+}, 5000);
+
+/* 박스를 한 번 움직이면 즉시 사라짐 */
+box.addEventListener('mousedown', () => {
+  tooltip.classList.add('hidden');
+});
+
+  /* ── 이동 기능 ── */
+  let isDragging = false;
+  let startX, startY, startLeft, startTop;
+
+  box.addEventListener('mousedown', (e) => {
+    /* 핸들 클릭은 이동이 아닌 크기 조절로 처리 */
+    if (e.target === handle) return;
+
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+
+    const rect = box.getBoundingClientRect();
+    startLeft = rect.left;
+    startTop  = rect.top;
+
+    box.style.bottom = 'auto';
+    box.style.right  = 'auto';
+    box.style.left   = startLeft + 'px';
+    box.style.top    = startTop  + 'px';
+
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    box.style.left = (startLeft + dx) + 'px';
+    box.style.top  = (startTop  + dy) + 'px';
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  /* ── 크기 조절 기능 ── */
+  let isResizing = false;
+  let startW, startH, resizeStartX, resizeStartY;
+
+  handle.addEventListener('mousedown', (e) => {
+    isResizing = true;
+
+    resizeStartX = e.clientX;
+    resizeStartY = e.clientY;
+    startW = box.offsetWidth;
+    startH = box.offsetHeight;
+
+    e.preventDefault();
+    e.stopPropagation(); /* 이동 이벤트가 같이 발생하지 않게 */
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isResizing) return;
+
+    const dx = e.clientX - resizeStartX;
+    const dy = e.clientY - resizeStartY;
+
+    const newW = Math.max(80,  startW + dx); /* 최소 80px */
+    const newH = Math.max(100, startH + dy); /* 최소 100px */
+
+    box.style.width  = newW + 'px';
+    box.style.height = newH + 'px';
+  });
+
+  document.addEventListener('mouseup', () => {
+    isResizing = false;
+  });
+}
+
+
 
       /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
            SHOW CONVERSATION STEP
@@ -1088,132 +1284,102 @@
            for each conversation step, and handles
            auto-advance timing for steps 3, 4, 5.
         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-      function runTypewriter(n) {
+    function runTypewriter(n) {
         if (n === 1) {
-          typeWriter(
-            "text1",
-            "Hello.\nWhat sort of irregularities have you been experiencing?",
-            28,
-            () =>
-              typeWriter(
-                "sub1",
-                "안녕하세요.\n어떤 불편함으로 이곳을 찾으셨나요?",
-                20,
-                () => {
-                  // show label, input, and button together after all text is typed
-                  document.getElementById("label1").style.display = "block";
-                  document.getElementById("input1").style.display = "block";
-                  document.getElementById("submitBtn1").style.display = "block";
-                  document.getElementById("label1").classList.add("fade-in");
-                  document.getElementById("input1").classList.add("fade-in");
-                  document
-                    .getElementById("submitBtn1")
-                    .classList.add("fade-in");
-                },
-              ),
-          );
-        } else if (n === 2) {
-          typeWriter(
-            "text2",
-            "Have there been any recent changes in your environment or inner state?",
-            28,
-            () =>
-              typeWriter(
-                "sub2",
-                "최근에 환경적 변화나 심리적 변화가 있었나요?",
-                20,
-                () => {
-                  // show label, input, and button together after all text is typed
-                  // document.getElementById("label2").style.display = "block";
-                  // document.getElementById("input2").style.display = "block";
-                  // document.getElementById("submitBtn2").style.display = "block";
-                  // document.getElementById("label2").classList.add("fade-in");
-                  // document.getElementById("input2").classList.add("fade-in");
-                  // document
-                  //   .getElementById("submitBtn2")
-                  //   .classList.add("fade-in");
-                  // Step 5: 처방 데이터를 localStorage에 저장
-                  // Step 5: 처방전 값 채우고 버튼 표시
-                  document.getElementById("label2").style.display = "block";
-        document.getElementById("input2").style.display = "block";
-        document.getElementById("submitBtn2").style.display = "block";
-        document.getElementById("label2").classList.add("fade-in");
-        document.getElementById("input2").classList.add("fade-in");
-        document.getElementById("submitBtn2").classList.add("fade-in");
-                  
-                },
-              ),
-          );
-        } else if (n === 3) {
-          // "Ok." — type it, then wait 3 seconds and auto-advance to conv4
-          typeWriter("text3", "Ok.", 40, () =>
-            typeWriter(
-              "sub3",
-              "알겠습니다.",
-              30,
-              () => setTimeout(() => showConv(4), 3000), // 3 second pause
-            ),
-          );
-        } else if (n === 4) {
-          // Type the intro text first
-          typeWriter(
-            "text4",
-            "According to M.A.S.S human analysis,\nyour diagnosis is this:",
-            28,
-            () => {
-              typeWriter(
-                "sub4",
-                "M.A.S.S 인간 분석학에 따르면,\n당신의 진단명은 이렇습니다:",
-                20,
-                () => {
-                  // After intro is typed, show the diagnosis name with green highlight
-                  buildDiagnosis();
-                  // Wait 3 seconds then go to conv5
-                  setTimeout(() => showConv(5), 6000);
-                },
-              );
-            },
-          );
-        } else if (n === 5) {
-          // Symptom description using both answers
-          const en = `The symptom of this syndrome is ${answer1} because of ${answer2}.`;
-          const ko = `이 증후군의 증상은 ${answer2} 때문에 ${answer1} 하는 것입니다.`;
-          typeWriter("text5", en, 28, () =>
-            typeWriter(
-              "sub5",
-              ko,
-              20,
-              // Wait 3 seconds then go to conv6
-              () => setTimeout(() => showConv(6), 3000),
-            ),
-          );
-        } else if (n === 6) {
-          typeWriter("text6", "I'll prescribe you:", 28, () => {
-            typeWriter("sub6", "당신에게 처방해 드리겠습니다:", 20, () =>
-              buildPrescription(),
-            );
-          });
-        }
-      }
-      function generateId() {
-        const part1 = String(Math.floor(Math.random() * 900000) + 100000);
-        const part2 = String(Math.floor(Math.random() * 90) + 10);
-        return `${part1}-${part2}-E`;
-      }
+  const text1En = "Hello.\nWhat sort of irregularities have you been experiencing?";
+  const text1Mars = "hello.\nwhat sort of irregularities have you been experiencing?";
+  const sub1Mars = "annyeonghaseyo.\neotteon bulpyeonham euro igoseul chaj euseyo?";
+  const sub1Earth = "안녕하세요.\n어떤 불편함으로 이곳을 찾으셨나요?";
 
-      function generateDoctorName() {
-        const consonants = "BCDFGHJKLMNPQRSTVWXYZ";
-        const vowels = "AEIOU";
-        const length = Math.floor(Math.random() * 5) + 3;
-        let name = "";
-        for (let i = 0; i < length; i++) {
-          name +=
-            i % 2 === 0
-              ? consonants[Math.floor(Math.random() * consonants.length)]
-              : vowels[Math.floor(Math.random() * vowels.length)];
-        }
-        return name;
-      }
+  if (isMars) {
+    /* 영어 메인 텍스트도 윙딩스로 */
+    document.getElementById('text1').innerHTML =
+      `<span class="wingdings">${toWingdings(text1Mars)}</span>`;
+    /* 한국어 자막도 윙딩스로 */
+    document.getElementById('sub1').innerHTML =
+      `<span class="wingdings">${toWingdings(sub1Mars)}</span>`;
+    setTimeout(() => {
+      document.getElementById("label1").style.display = "block";
+      document.getElementById("input1").style.display = "block";
+      document.getElementById("submitBtn1").style.display = "block";
+      document.getElementById("label1").classList.add("fade-in");
+      document.getElementById("input1").classList.add("fade-in");
+      document.getElementById("submitBtn1").classList.add("fade-in");
+    }, 800);
+  } else {
+    typeWriter("text1", text1En, 28, () => {
+      typeWriter("sub1", sub1Earth, 20, () => {
+        document.getElementById("label1").style.display = "block";
+        document.getElementById("input1").style.display = "block";
+        document.getElementById("submitBtn1").style.display = "block";
+        document.getElementById("label1").classList.add("fade-in");
+        document.getElementById("input1").classList.add("fade-in");
+        document.getElementById("submitBtn1").classList.add("fade-in");
+      });
+    });
+  }
+}
+ else if (n === 2) {
+  const text2Mars = "have there been any recent changes in your environment or inner state?";
+  const sub2Mars = "geugeun hwangyeonjeok byeonhwa na simlijeok byeonhwa ga isseossnayo?";
+
+  if (isMars) {
+    document.getElementById('text2').innerHTML =
+      `<span class="wingdings">${toWingdings(text2Mars)}</span>`;
+    document.getElementById('sub2').innerHTML =
+      `<span class="wingdings">${toWingdings(sub2Mars)}</span>`;
+    setTimeout(() => { /* 버튼 표시 */ }, 800);
+  } else { /* 기존 typeWriter */ }
+
+} else if (n === 3) {
+  const text3Mars = "ok.";
+  const sub3Mars = "algessseumnida.";
+
+  if (isMars) {
+    document.getElementById('text3').innerHTML =
+      `<span class="wingdings">${toWingdings(text3Mars)}</span>`;
+    document.getElementById('sub3').innerHTML =
+      `<span class="wingdings">${toWingdings(sub3Mars)}</span>`;
+    setTimeout(() => showConv(4), 3000);
+  } else { /* 기존 typeWriter */ }
+
+} else if (n === 4) {
+  const text4Mars = "according to mass human analysis,\nyour diagnosis is this:";
+  const sub4Mars = "mass ingan bunseok hage ttareumyeon,\ndangsin ui jindanmyeong eun ireohseumnida:";
+
+  if (isMars) {
+    document.getElementById('text4').innerHTML =
+      `<span class="wingdings">${toWingdings(text4Mars)}</span>`;
+    document.getElementById('sub4').innerHTML =
+      `<span class="wingdings">${toWingdings(sub4Mars)}</span>`;
+    buildDiagnosis();
+    setTimeout(() => showConv(5), 6000);
+  } else { /* 기존 typeWriter */ }
+
+} else if (n === 5) {
+  const en = `the symptom of this syndrome is ${answer1} because of ${answer2}.`;
+  const koMars = `i jeunghungun ui jeungsang eun ${answer2} ttaemune ${answer1} haneun geos imnida.`;
+
+  if (isMars) {
+    document.getElementById('text5').innerHTML =
+      `<span class="wingdings">${toWingdings(en)}</span>`;
+    document.getElementById('sub5').innerHTML =
+      `<span class="wingdings">${toWingdings(koMars)}</span>`;
+    setTimeout(() => showConv(6), 3000);
+  } else { /* 기존 typeWriter */ }
+
+} else if (n === 6) {
+  const text6Mars = "ill prescribe you:";
+  const sub6Mars = "dangsin ege cheobang hae deurigesseumnida:";
+
+  if (isMars) {
+    document.getElementById('text6').innerHTML =
+      `<span class="wingdings">${toWingdings(text6Mars)}</span>`;
+    document.getElementById('sub6').innerHTML =
+      `<span class="wingdings">${toWingdings(sub6Mars)}</span>`;
+    buildPrescription();
+  } else { /* 기존 typeWriter */ }
+}
 
       /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
            BUILD DIAGNOSIS (conversation 4)
@@ -1252,6 +1418,7 @@
         }
         typeDiag();
       }
+    }
 
       /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
            BUILD PRESCRIPTION (conversation 6)
@@ -1338,7 +1505,10 @@ document.getElementById("homeBtn").classList.add("fade-in");
            When the page loads, conversation 1 is already
            .active in HTML — just start its typewriter.
         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-      window.addEventListener("load", () => runTypewriter(1));
+      /* 페이지 로드 후 실행 */
+window.addEventListener('load', () => {
+  runTypewriter(1);
+  initDraggable();    /* ← 이 줄 추가 */});
     </script>
   </body>
 </html>
